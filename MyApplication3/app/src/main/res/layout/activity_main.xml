@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="20"
+        android:text="大樂透選號"
+        android:gravity="center"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:background="@android:color/holo_orange_light"
+        android:textColor="@android:color/background_light"
+        />
+    <ListView
+        android:id="@+id/list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="80"
+        />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="20"
+        >
+        <Button
+            android:id="@+id/btn1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="隨機選號"
+            android:textSize="18dp"
+            android:textColor="@android:color/background_light"
+            android:textStyle="bold"
+            android:background="@android:color/holo_red_dark"
+            android:layout_alignParentBottom="true"
+            android:layout_marginHorizontal="12dp"
+            />
+
+    </RelativeLayout>
+
+
+</LinearLayout>

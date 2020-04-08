@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#9a1a2333"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="121dp"
+        android:background="#2f3646"
+        android:elevation="5dp">
+
+        <SearchView
+            android:id="@+id/search_view"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:layout_marginVertical="80dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/search_view_line" />
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="#1a2333">
+
+        <ImageButton
+            android:id="@+id/img_bnt1"
+            android:layout_width="50dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="15dp"
+            android:background="@null"
+            android:onClick="img_bnt1"
+            android:src="@drawable/icons8_camera_64" />
+
+        <ImageButton
+            android:id="@+id/img_bnt2"
+            android:layout_width="50dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="135dp"
+            android:layout_marginTop="15dp"
+            android:background="@null"
+            android:src="@drawable/icons8_camera_64" />
+
+        <ImageButton
+            android:id="@+id/img_bnt3"
+            android:layout_width="50dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="240dp"
+            android:layout_marginTop="15dp"
+            android:background="@null"
+            android:src="@drawable/icons8_camera_64" />
+
+        <ImageButton
+            android:id="@+id/img_bnt4"
+            android:layout_width="50dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="336dp"
+            android:layout_marginTop="15dp"
+            android:background="@null"
+            android:src="@drawable/icons8_camera_64" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/img_bnt1"
+            android:layout_marginLeft="40dp"
+            android:layout_marginBottom="-25dp"
+            android:text="bnt1"
+            android:textColor="#FFFFFF" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/img_bnt2"
+            android:layout_marginLeft="145dp"
+            android:layout_marginBottom="-25dp"
+            android:text="bnt2"
+            android:textColor="#FFFFFF" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/img_bnt2"
+            android:layout_marginLeft="250dp"
+            android:layout_marginBottom="-25dp"
+            android:text="bnt3"
+            android:textColor="#FFFFFF" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/img_bnt3"
+            android:layout_marginLeft="345dp"
+            android:layout_marginBottom="-25dp"
+            android:text="bnt4"
+            android:textColor="#FFFFFF" />
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="5dp">
+    
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyler_view"
+            android:background="#1a2333"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </RelativeLayout>
+
+
+</LinearLayout>

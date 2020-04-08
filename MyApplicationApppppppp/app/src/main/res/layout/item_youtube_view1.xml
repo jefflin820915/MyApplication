@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#1a2333"
+    android:orientation="vertical">
+
+
+    <com.google.android.youtube.player.YouTubePlayerView
+        android:id="@+id/youtubePlay_view"
+        class="com.google.android.youtube.player.YouTubePlayerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scaleType="fitXY" />
+
+
+    <ImageButton
+        android:id="@+id/youtu_bnt1"
+        android:layout_width="68dp"
+        android:layout_height="70dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="275dp"
+        android:layout_marginBottom="306dp"
+        android:background="@null"
+        android:src="@drawable/icons8_camera_64" />
+
+    <ImageButton
+        android:id="@+id/youtu_bnt2"
+        android:layout_width="68dp"
+        android:layout_height="70dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="275dp"
+        android:layout_toRightOf="@+id/youtu_bnt1"
+        android:background="@null"
+        android:src="@drawable/icons8_camera_64" />
+
+
+    <ImageButton
+        android:id="@+id/youtu_bnt3"
+        android:layout_width="68dp"
+        android:layout_height="70dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="275dp"
+        android:layout_toRightOf="@+id/youtu_bnt2"
+        android:background="@null"
+        android:src="@drawable/icons8_camera_64" />
+
+    <ImageButton
+        android:id="@+id/youtu_bnt4"
+        android:layout_width="68dp"
+        android:layout_height="70dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginStart="40dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="275dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="53dp"
+        android:layout_toRightOf="@+id/youtu_bnt3"
+        android:background="@null"
+        android:src="@drawable/icons8_camera_64" />
+
+
+    <TextView
+        android:layout_width="50dp"
+        android:layout_height="20dp"
+        android:layout_alignTop="@+id/youtu_bnt1"
+        android:layout_alignBottom="@+id/youtu_bnt1"
+        android:layout_alignParentLeft="true"
+        android:layout_marginStart="35dp"
+        android:layout_marginLeft="35dp"
+        android:layout_marginTop="52dp"
+        android:text="bnt1"
+        android:textColor="#FFFFFF" />
+
+    <TextView
+        android:layout_width="50dp"
+        android:layout_height="20dp"
+        android:layout_alignTop="@+id/youtu_bnt2"
+        android:layout_alignBottom="@+id/youtu_bnt2"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="144dp"
+        android:layout_marginTop="52dp"
+        android:text="bnt2"
+        android:textColor="#FFFFFF" />
+
+    <TextView
+        android:layout_width="50dp"
+        android:layout_height="20dp"
+        android:layout_alignTop="@+id/youtu_bnt3"
+        android:layout_alignBottom="@+id/youtu_bnt3"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="250dp"
+        android:layout_marginTop="52dp"
+        android:text="bnt3"
+        android:textColor="#FFFFFF" />
+
+    <TextView
+        android:layout_width="50dp"
+        android:layout_height="20dp"
+        android:layout_alignTop="@+id/youtu_bnt4"
+        android:layout_alignBottom="@+id/youtu_bnt4"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="353dp"
+        android:layout_marginTop="52dp"
+        android:text="bnt3"
+        android:textColor="#FFFFFF" />
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="347dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="2dp"
+        android:background="#2f3646">
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </TableLayout>
+
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

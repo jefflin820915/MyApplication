@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <EditText
+        android:id="@+id/send_broadcast_mag_input_box"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="請輸入要發送的廣播內容"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="sendBroadcastMsg"
+        android:text="發送一條通知...." />
+
+</LinearLayout>

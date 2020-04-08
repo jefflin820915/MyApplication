@@ -1,0 +1,2 @@
+rootProject.name='My ApplicationBankServicesdemo'
+include ':app'

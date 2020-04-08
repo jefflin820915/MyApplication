@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">My Application</string>
+    <string-array name="drink">
+        <item>奶茶</item>
+        <item>綠茶</item>
+        <item>紅茶</item>
+        <item>可樂</item>
+    </string-array>
+
+    <string-array name="temp">
+        <item>去冰</item>
+        <item>微冰</item>
+        <item>正常冰</item>
+        <item>溫</item>
+        <item>熱</item>
+    </string-array>
+
+    <string-array name="temp2">
+        <item>去冰</item>
+        <item>微冰</item>
+        <item>正常冰</item>
+    </string-array>
+</resources>

@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">My ApplicationApppppppp</string>
+    <string-array name="verStirng">
+        <item>12321</item>
+        <item>12322221</item>
+        <item>12333321</item>
+        <item>123444421</item>
+    </string-array>
+
+</resources>
