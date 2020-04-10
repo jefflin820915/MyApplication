@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/My ApplicationContactprovider.iml" filepath="$PROJECT_DIR$/My ApplicationContactprovider.iml" group="My ApplicationContactprovider" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="My ApplicationContactprovider/app" />
+      <module fileurl="file://$PROJECT_DIR$/MyApplicationContactprovider.iml" filepath="$PROJECT_DIR$/MyApplicationContactprovider.iml" group="MyApplicationContactprovider" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="MyApplicationContactprovider/app" />
     </modules>
   </component>
 </project>
