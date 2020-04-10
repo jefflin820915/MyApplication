@@ -7,9 +7,15 @@
     tools:context=".MainActivity">
 
     <Button
+        android:id="@+id/edit_query"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="獲取數據"
         android:onClick="getUserRemote"/>
-
+    
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="插入數據"
+        android:onClick="addUser"/>
 </LinearLayout>

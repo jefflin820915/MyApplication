@@ -5,7 +5,9 @@ import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
+import android.util.Log;
 
 import com.example.myapplicationcontentprovider.db.UserDataBaseHelper;
 import com.example.myapplicationcontentprovider.utils.Constant;
@@ -61,7 +63,26 @@ public class UserProvider  extends ContentProvider {
     @Nullable
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues values) {
-        return null;
+
+        int result = sUriMatcher.match( uri );
+
+        if (result==USER_MATCH_CODE){
+
+            SQLiteDatabase db = mUserDataBaseHelper.getWritableDatabase();
+            long id = db.insert( Constant.TABLE_NAME, null, values );
+            Uri resultUri = Uri.parse( "content://com.example.myapplicationcontentprovider/user/" + id );
+
+            Log.v(  "brad","insert user result ---> " + id );
+
+            //插入數據成功,數據已經變化,所以通知其他地方(誰監聽就通知誰)
+            getContext().getContentResolver().notifyChange( resultUri,null );
+
+            return resultUri;
+        }else{
+
+            throw new IllegalArgumentException( "參數錯誤" );
+        }
+
     }
 
     @Override
