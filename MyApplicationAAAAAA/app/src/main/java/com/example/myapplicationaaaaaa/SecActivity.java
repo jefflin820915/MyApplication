@@ -29,6 +29,7 @@ public class SecActivity extends AppCompatActivity {
 
     private RecyclerView mRecyclerView;
     private SecActivityAdapter mSecAdapter;
+    private List<HashMap<String, String>> mList;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,6 +51,8 @@ public class SecActivity extends AppCompatActivity {
             public void OnItemClick(View v, int position) {
                 Intent intent = new Intent(  );
                 intent.setClass( SecActivity.this,ThirdActivity.class );
+                intent.putExtra( "id",mList.get( position ).toString() );
+                //TODO:
                 startActivity( intent );
             }
         } );
@@ -84,7 +87,7 @@ public class SecActivity extends AppCompatActivity {
 
             @Override
             public void run() {
-                final List<HashMap<String, String>> list = new ArrayList<>();
+                mList = new ArrayList<>();
 
                 try {
 
@@ -119,14 +122,14 @@ public class SecActivity extends AppCompatActivity {
                         hashMap.put( "thumbnailUrl", thumbnailUrl );
 
 
-                        list.add( hashMap );
+                        mList.add( hashMap );
                     }
 
                     runOnUiThread( new Runnable() {
                         @Override
                         public void run() {
                             showList();
-                            mSecAdapter.addList( list );
+                            mSecAdapter.addList( mList );
                         }
                     } );
                 } catch (MalformedURLException e) {
