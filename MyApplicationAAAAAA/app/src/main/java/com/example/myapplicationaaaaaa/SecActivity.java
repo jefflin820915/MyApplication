@@ -1,7 +1,14 @@
 package com.example.myapplicationaaaaaa;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -16,17 +23,12 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import java.util.List;
 
 public class SecActivity extends AppCompatActivity {
 
     private RecyclerView mRecyclerView;
     private SecActivityAdapter mSecAdapter;
-    ArrayList<HashMap<String,String>> data = new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -35,46 +37,57 @@ public class SecActivity extends AppCompatActivity {
 
         initView();
 
+        setAdapter();
+
         loadJson();
 
-        showList();
+        listener();
+    }
+
+    private void listener() {
+        mSecAdapter.setOnItemClick( new SecActivityAdapter.OnRecyclerViewItemClickListener() {
+            @Override
+            public void OnItemClick(View v, int position) {
+                Intent intent = new Intent(  );
+                intent.setClass( SecActivity.this,ThirdActivity.class );
+                startActivity( intent );
+            }
+        } );
 
     }
 
+    private void setAdapter() {
+
+        GridLayoutManager gridLayoutManager = new GridLayoutManager( this, 4 );
+        gridLayoutManager.setOrientation( GridLayoutManager.VERTICAL );
+        mRecyclerView.setLayoutManager( gridLayoutManager );
+        mSecAdapter = new SecActivityAdapter( this );
+        mRecyclerView.setAdapter( mSecAdapter );
+    }
 
     private void showList() {
 
-
-                GridLayoutManager gridLayoutManager = new GridLayoutManager( this, 4 );
-
-                gridLayoutManager.setOrientation( GridLayoutManager.HORIZONTAL );
-
-                mRecyclerView.setLayoutManager( gridLayoutManager );
-
-                mSecAdapter = new SecActivityAdapter();
-
-                mRecyclerView.setAdapter( mSecAdapter );
-
-                mSecAdapter.notifyDataSetChanged();
+        mSecAdapter.notifyDataSetChanged();
 
     }
 
     private void initView() {
 
         mRecyclerView = findViewById( R.id.recycler_view );
-
-
     }
-
 
     private void loadJson() {
 
         final String loadData = "http://jsonplaceholder.typicode.com/photos";
+
         new Thread( new Runnable() {
+
             @Override
             public void run() {
+                final List<HashMap<String, String>> list = new ArrayList<>();
 
                 try {
+
                     URL apiUrl = new URL( loadData );
                     HttpURLConnection connection = (HttpURLConnection) apiUrl.openConnection();
                     connection.setConnectTimeout( 100000 );
@@ -88,39 +101,34 @@ public class SecActivity extends AppCompatActivity {
                         json.append( line );
                         line = br.readLine();
                     }
+
                     Log.v( "brad", "" + json );
 
                     JSONArray jsonArray = new JSONArray( String.valueOf( json ) );
 
-                        for (int i = 0; i < jsonArray.length(); i++) {
+                    for (int i = 0; i < jsonArray.length(); i++) {
 
-                            JSONObject jsonObject = jsonArray.getJSONObject( i );
-                            String albumId = jsonObject.getString( "albumId" );
-                            String id = jsonObject.getString( "id" );
-                            String title = jsonObject.getString( "title" );
-                            String url = jsonObject.getString( "url" );
-                            String thumbnailUrl = jsonObject.getString( "thumbnailUrl" );
+                        JSONObject jsonObject = jsonArray.getJSONObject( i );
+                        String id = jsonObject.getString( "id" );
+                        String title = jsonObject.getString( "title" );
+                        String thumbnailUrl = jsonObject.getString( "thumbnailUrl" );
+
+                        HashMap<String, String> hashMap = new HashMap<>();
+                        hashMap.put( "id", id );
+                        hashMap.put( "title", title );
+                        hashMap.put( "thumbnailUrl", thumbnailUrl );
 
 
-                            HashMap<String, String> hashMap = new HashMap<>();
-                            hashMap.put( "id", id );
-                            hashMap.put( "title", title );
-                            hashMap.put( "url", url );
-                            hashMap.put( "thumbnailUrl", thumbnailUrl );
+                        list.add( hashMap );
+                    }
 
-                            data.add( hashMap );
+                    runOnUiThread( new Runnable() {
+                        @Override
+                        public void run() {
+                            showList();
+                            mSecAdapter.addList( list );
                         }
-                    Log.v( "brad", "loadData" + data );
-
-                        runOnUiThread( new Runnable() {
-                            @Override
-                            public void run() {
-                                showList();
-                                mSecAdapter.notifyDataSetChanged();
-
-                            }
-                        } );
-
+                    } );
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 } catch (IOException e) {
@@ -128,10 +136,8 @@ public class SecActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
             }
         } ).start();
-
     }
 }
 

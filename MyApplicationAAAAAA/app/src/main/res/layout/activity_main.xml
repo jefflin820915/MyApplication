@@ -3,27 +3,27 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:orientation="vertical"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".MainActivity">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="JSON Placeholder"
-        android:textSize="25sp"
-        android:textAllCaps="false"
         android:layout_marginLeft="100dp"
-        android:layout_marginTop="100dp"/>
+        android:layout_marginTop="100dp"
+        android:text="JSON Placeholder"
+        android:textAllCaps="false"
+        android:textSize="25sp" />
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Request API"
-        android:textSize="15sp"
-        android:textAllCaps="false"
         android:layout_marginTop="150dp"
-        android:onClick="nextTwoPage"/>
+        android:onClick="nextTwoPage"
+        android:text="Request API"
+        android:textAllCaps="false"
+        android:textSize="15sp" />
 
 
 </LinearLayout>
