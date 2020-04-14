@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
 
                 try {
-                    URL url = new URL( "http://192.168.9.79:9102/get/text" );
+                    URL url = new URL( "http://192.168.9.80:9102/get/text" );
                     HttpURLConnection connection = (HttpURLConnection)url.openConnection();
                     connection.setConnectTimeout( 10000 );
                     connection.setRequestMethod( "GET" );
@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
                         InputStream inputStream = connection.getInputStream();
                         BufferedReader br = new BufferedReader( new InputStreamReader( inputStream ) );
                         String json = br.readLine();
-                        //Log.v("brad","line -> " + line);
+                        Log.v("brad","line -> " + json);
                         Gson gson = new Gson();
                         getTestItem getTestItem = gson.fromJson( json, getTestItem.class );
                         updateUI(getTestItem);

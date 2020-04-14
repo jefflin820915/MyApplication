@@ -37,7 +37,7 @@ public class GetResultListAdpter extends RecyclerView.Adapter<GetResultListAdpte
         Title.setText( dataBean.getTitle());
 
         ImageView cover = view.findViewById( R.id.item_img );
-        Glide.with( view.getContext() ).load( "http://192.168.9.79:9102"+ data.get( position ).getCover()).into(cover);
+        Glide.with( view.getContext() ).load( "http://192.168.9.80:9102"+ data.get( position ).getCover()).into(cover);
     }
 
     @Override
