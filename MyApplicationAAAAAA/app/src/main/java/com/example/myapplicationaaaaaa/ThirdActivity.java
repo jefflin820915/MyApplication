@@ -3,6 +3,7 @@ package com.example.myapplicationaaaaaa;
 import android.os.Bundle;
 
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.HashMap;
@@ -17,6 +18,7 @@ public class ThirdActivity extends AppCompatActivity {
 
     private TextView mThirdIdView;
     private TextView mThirdTitleView;
+    private ImageView mThirdImgView;
 
 
     @Override
@@ -28,13 +30,13 @@ public class ThirdActivity extends AppCompatActivity {
 
         getItemData();
 
-
     }
 
     private void initView() {
 
         mThirdIdView = findViewById( R.id.third_id_text_view );
         mThirdTitleView = findViewById( R.id.third_title_text_view );
+        mThirdImgView = findViewById( R.id.third_img_view );
 
     }
 
@@ -42,7 +44,11 @@ public class ThirdActivity extends AppCompatActivity {
 
         jsonArray = (HashMap<String, Object>) getIntent().getSerializableExtra( ITEM_DATA );
         mThirdIdView.setText( "id: " + jsonArray.get( "id" ).toString() );
-        mThirdTitleView.setText("Title: " + jsonArray.get( "title" ).toString() );
-        Log.v( "jeff","jsonArray -->" + jsonArray );
+        mThirdTitleView.setText( "Title: " + jsonArray.get( "title" ).toString() );
+
+        Log.v( "jeff", "jsonArray -->" + jsonArray );
     }
+
+
+
 }

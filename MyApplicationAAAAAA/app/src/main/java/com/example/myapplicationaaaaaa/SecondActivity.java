@@ -106,13 +106,14 @@ public class SecondActivity extends AppCompatActivity {
                         mJsonObject = jsonArray.getJSONObject( i );
                         String id = mJsonObject.getString( "id" );
                         String title = mJsonObject.getString( "title" );
+                        String url = mJsonObject.getString( "url" );
                         String thumbnailUrl = mJsonObject.getString( "thumbnailUrl" );
 
                         mHashMap = new HashMap<>();
                         mHashMap.put( "id", id );
                         mHashMap.put( "title", title );
+                        mHashMap.put( "url",url );
                         mHashMap.put( "thumbnailUrl", thumbnailUrl );
-
 
                         mList.add( mHashMap );
                     }
