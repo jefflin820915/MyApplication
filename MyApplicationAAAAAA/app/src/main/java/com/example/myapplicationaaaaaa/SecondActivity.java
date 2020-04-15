@@ -2,6 +2,7 @@ package com.example.myapplicationaaaaaa;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 
@@ -25,11 +26,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class SecActivity extends AppCompatActivity {
+public class SecondActivity extends AppCompatActivity {
 
     private RecyclerView mRecyclerView;
-    private SecActivityAdapter mSecAdapter;
+    private SecondActivityAdapter mSecAdapter;
     private List<HashMap<String, String>> mList;
+    private HashMap<String, String> mHashMap;
+    private JSONObject mJsonObject;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,29 +45,16 @@ public class SecActivity extends AppCompatActivity {
 
         loadJson();
 
-        listener();
     }
 
-    private void listener() {
-        mSecAdapter.setOnItemClick( new SecActivityAdapter.OnRecyclerViewItemClickListener() {
-            @Override
-            public void OnItemClick(View v, int position) {
-                Intent intent = new Intent(  );
-                intent.setClass( SecActivity.this,ThirdActivity.class );
-                intent.putExtra( "id",mList.get( position ).toString() );
-                //TODO:
-                startActivity( intent );
-            }
-        } );
 
-    }
 
     private void setAdapter() {
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager( this, 4 );
         gridLayoutManager.setOrientation( GridLayoutManager.VERTICAL );
         mRecyclerView.setLayoutManager( gridLayoutManager );
-        mSecAdapter = new SecActivityAdapter( this );
+        mSecAdapter = new SecondActivityAdapter( this );
         mRecyclerView.setAdapter( mSecAdapter );
     }
 
@@ -87,10 +77,10 @@ public class SecActivity extends AppCompatActivity {
 
             @Override
             public void run() {
+
                 mList = new ArrayList<>();
 
                 try {
-
                     URL apiUrl = new URL( loadData );
                     HttpURLConnection connection = (HttpURLConnection) apiUrl.openConnection();
                     connection.setConnectTimeout( 100000 );
@@ -104,25 +94,27 @@ public class SecActivity extends AppCompatActivity {
                         json.append( line );
                         line = br.readLine();
                     }
+                    is.close();
+                    br.close();
 
-                    Log.v( "brad", "" + json );
+                    Log.v( "jeff", "" + json );
 
                     JSONArray jsonArray = new JSONArray( String.valueOf( json ) );
 
                     for (int i = 0; i < jsonArray.length(); i++) {
 
-                        JSONObject jsonObject = jsonArray.getJSONObject( i );
-                        String id = jsonObject.getString( "id" );
-                        String title = jsonObject.getString( "title" );
-                        String thumbnailUrl = jsonObject.getString( "thumbnailUrl" );
+                        mJsonObject = jsonArray.getJSONObject( i );
+                        String id = mJsonObject.getString( "id" );
+                        String title = mJsonObject.getString( "title" );
+                        String thumbnailUrl = mJsonObject.getString( "thumbnailUrl" );
 
-                        HashMap<String, String> hashMap = new HashMap<>();
-                        hashMap.put( "id", id );
-                        hashMap.put( "title", title );
-                        hashMap.put( "thumbnailUrl", thumbnailUrl );
+                        mHashMap = new HashMap<>();
+                        mHashMap.put( "id", id );
+                        mHashMap.put( "title", title );
+                        mHashMap.put( "thumbnailUrl", thumbnailUrl );
 
 
-                        mList.add( hashMap );
+                        mList.add( mHashMap );
                     }
 
                     runOnUiThread( new Runnable() {

@@ -2,14 +2,12 @@ package com.example.myapplicationaaaaaa;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
+import android.media.ImageReader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,25 +17,12 @@ import java.util.HashMap;
 import java.util.List;
 
 
-public class SecActivityAdapter extends RecyclerView.Adapter<SecActivityAdapter.InnerHolder> {
+public class SecondActivityAdapter extends RecyclerView.Adapter<SecondActivityAdapter.InnerHolder> {
 
     private Context mContext;
     private List<HashMap<String, String>> mList;
 
-    OnRecyclerViewItemClickListener listener;
-
-    public interface OnRecyclerViewItemClickListener{
-
-    void OnItemClick(View v,int position);
-
-    }
-
-    public void setOnItemClick(OnRecyclerViewItemClickListener listener){
-        this.listener=listener;
-    }
-
-
-    public SecActivityAdapter(Context mContext) {
+    public SecondActivityAdapter(Context mContext) {
         this.mContext = mContext;
         mList = new ArrayList<>();
     }
@@ -66,12 +51,18 @@ public class SecActivityAdapter extends RecyclerView.Adapter<SecActivityAdapter.
             @Override
             public void onClick(View v) {
 
-                if (listener!=null) {
-                    listener.OnItemClick( v,position );
-                }
+                itemToThirdPage( position );
             }
         } );
+    }
 
+    private void itemToThirdPage(int position) {
+
+        Intent intent = new Intent(  );
+        intent.setClass( mContext, ThirdActivity.class );
+        intent.setFlags( Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS );
+        intent.putExtra( "ItemData",mList.get( position ));
+        mContext.startActivity( intent );
     }
 
     @Override
@@ -84,7 +75,6 @@ public class SecActivityAdapter extends RecyclerView.Adapter<SecActivityAdapter.
         ImageView mImgView;
         TextView mIdView;
         TextView mTitleView;
-
 
         public InnerHolder(@NonNull View itemView) {
             super( itemView );

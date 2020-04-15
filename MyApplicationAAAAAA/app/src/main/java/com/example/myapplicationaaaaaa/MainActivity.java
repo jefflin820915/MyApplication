@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
     public void nextTwoPage(View view) {
 
         Intent intent = new Intent(  );
-        intent.setClass( this,SecActivity.class );
+        intent.setClass( this, SecondActivity.class );
         startActivity( intent );
     }
 
