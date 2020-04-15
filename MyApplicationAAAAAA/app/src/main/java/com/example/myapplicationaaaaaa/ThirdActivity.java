@@ -20,7 +20,6 @@ public class ThirdActivity extends AppCompatActivity {
     private TextView mThirdTitleView;
     private ImageView mThirdImgView;
 
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
@@ -45,7 +44,12 @@ public class ThirdActivity extends AppCompatActivity {
         jsonArray = (HashMap<String, Object>) getIntent().getSerializableExtra( ITEM_DATA );
         mThirdIdView.setText( "id: " + jsonArray.get( "id" ).toString() );
         mThirdTitleView.setText( "Title: " + jsonArray.get( "title" ).toString() );
+        String url = jsonArray.get( "url" ).toString();
 
+        new LoadThumbnailUrlImage(mThirdImgView).execute( url );
+
+
+        Log.v( "jeff","url---> " + url );
         Log.v( "jeff", "jsonArray -->" + jsonArray );
     }
 
