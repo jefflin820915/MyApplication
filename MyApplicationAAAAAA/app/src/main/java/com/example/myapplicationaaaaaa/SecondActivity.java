@@ -106,6 +106,7 @@ public class SecondActivity extends AppCompatActivity {
                 //創建ArrayList對象
                 mList = new ArrayList<>();
 
+                //連接API
                 try {
                     URL apiUrl = new URL( loadData );
                     HttpURLConnection connection = (HttpURLConnection) apiUrl.openConnection();
@@ -138,7 +139,7 @@ public class SecondActivity extends AppCompatActivity {
                         mHashMap.put( "id", id );
                         mHashMap.put( "title", title );
                         mHashMap.put( "url", url );
-                        mHashMap.put( "thumbnailUrl",thumbnailUrl);
+                        mHashMap.put( "thumbnailUrl", thumbnailUrl );
 
                         mList.add( mHashMap );
                     }

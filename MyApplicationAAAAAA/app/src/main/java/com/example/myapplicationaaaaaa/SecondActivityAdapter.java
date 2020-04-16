@@ -36,6 +36,7 @@ public class SecondActivityAdapter extends RecyclerView.Adapter<SecondActivityAd
         notifyDataSetChanged();
     }
 
+    //在這裡面創建條目
     @NonNull
     @Override
     public InnerHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -44,15 +45,21 @@ public class SecondActivityAdapter extends RecyclerView.Adapter<SecondActivityAd
         return new InnerHolder( view );
     }
 
+    //綁定holder,用來設置數據
     @Override
     public void onBindViewHolder(@NonNull final InnerHolder holder, final int position) {
 
+        //imageView設置拿到mList的位置並key為id的mList資料
         holder.mIdView.setText( mList.get( position ).get( "id" ) );
+
+        //TextView設置拿到mList的位置並key為title的mList資料
         holder.mTitleView.setText( mList.get( position ).get( "title" ) );
 
+        //拿到mList位置並key為thumbnailUrl的資料並設一個變數
         mThumbnailUrl = mList.get( position ).get( "thumbnailUrl" );
 
-        new LoadThumbnailUrlImage(holder.mImgView).execute(mThumbnailUrl);
+        //傳想設置的imageView和URL給LoadTAPIImage
+        new LoadTAPIImage( holder.mImgView ).execute( mThumbnailUrl );
 
 
 //        holder.mImgView.post( new Runnable() {
@@ -76,7 +83,7 @@ public class SecondActivityAdapter extends RecyclerView.Adapter<SecondActivityAd
 
         Log.v( "jeff", "thumbnailUrl--> " + mThumbnailUrl );
 
-
+        //每個item監聽點擊事件
         holder.itemView.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,6 +93,8 @@ public class SecondActivityAdapter extends RecyclerView.Adapter<SecondActivityAd
         } );
     }
 
+    //使用意圖傳資料給第三頁
+    //跳轉到第三頁
     private void nextToThirdPage(int position) {
 
         Intent intent = new Intent();
@@ -95,6 +104,7 @@ public class SecondActivityAdapter extends RecyclerView.Adapter<SecondActivityAd
         mContext.startActivity( intent );
     }
 
+    //返回條目個數
     @Override
     public int getItemCount() {
         return mList.size();

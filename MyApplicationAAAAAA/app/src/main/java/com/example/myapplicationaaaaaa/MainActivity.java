@@ -13,17 +13,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_main );
 
-
-
     }
 
+    //跳轉到第二頁
     public void nextTwoPage(View view) {
-
-        Intent intent = new Intent(  );
+        Intent intent = new Intent();
         intent.setClass( this, SecondActivity.class );
+
         startActivity( intent );
     }
-
-
-
 }
