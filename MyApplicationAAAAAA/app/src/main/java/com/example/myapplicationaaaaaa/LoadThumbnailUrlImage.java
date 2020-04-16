@@ -6,9 +6,12 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.widget.ImageView;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
 
 public class LoadThumbnailUrlImage extends AsyncTask<String, Void, Bitmap> {
@@ -37,6 +40,7 @@ public class LoadThumbnailUrlImage extends AsyncTask<String, Void, Bitmap> {
 
         if (bitmap != null) {
             imageView.setImageBitmap( bitmap );
+
         } else {
             Drawable holder = imageView.getContext().getResources().getDrawable( R.drawable.ic_launcher_background );
             imageView.setImageDrawable( holder );
@@ -55,8 +59,12 @@ public class LoadThumbnailUrlImage extends AsyncTask<String, Void, Bitmap> {
 
             return bitmap;
 
-        } catch (Exception e) {
-                e.printStackTrace();
+        } catch (ProtocolException e) {
+            e.printStackTrace();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         return null;
     }
