@@ -1,4 +1,4 @@
-package com.example.myapplicationaaaaaa;
+package com.example.MyAPP;
 
 import android.os.Bundle;
 
@@ -10,7 +10,6 @@ import android.widget.TextView;
 import java.util.HashMap;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 

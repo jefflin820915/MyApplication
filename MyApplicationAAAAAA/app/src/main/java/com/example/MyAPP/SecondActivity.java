@@ -1,13 +1,10 @@
-package com.example.myapplicationaaaaaa;
+package com.example.MyAPP;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -27,8 +24,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import javax.net.ssl.HttpsURLConnection;
 
 public class SecondActivity extends AppCompatActivity {
 
@@ -106,7 +101,7 @@ public class SecondActivity extends AppCompatActivity {
                 //創建ArrayList對象
                 mList = new ArrayList<>();
 
-                //連接API
+                //連接API,解析JSON
                 try {
                     URL apiUrl = new URL( loadData );
                     HttpURLConnection connection = (HttpURLConnection) apiUrl.openConnection();
@@ -122,7 +117,7 @@ public class SecondActivity extends AppCompatActivity {
                         line = mBr.readLine();
                     }
 
-
+                    //遍歷JSON,取出每個值中的每筆資料,對每個值設key與值
                     Log.v( "jeff", "" + json );
 
                     JSONArray jsonArray = new JSONArray( String.valueOf( json ) );

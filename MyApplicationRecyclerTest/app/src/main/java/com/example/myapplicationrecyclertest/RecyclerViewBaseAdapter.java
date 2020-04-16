@@ -23,7 +23,6 @@ public abstract class RecyclerViewBaseAdapter extends RecyclerView.Adapter<Recyc
         this.mData = data;
     }
 
-
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
