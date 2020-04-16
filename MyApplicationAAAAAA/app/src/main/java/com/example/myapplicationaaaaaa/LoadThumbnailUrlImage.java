@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.ImageView;
 
 import java.io.IOException;
@@ -13,6 +14,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+
+import javax.net.ssl.HttpsURLConnection;
 
 public class LoadThumbnailUrlImage extends AsyncTask<String, Void, Bitmap> {
 
@@ -52,13 +55,21 @@ public class LoadThumbnailUrlImage extends AsyncTask<String, Void, Bitmap> {
 
         try {
             URL uri = new URL( url );
-            HttpURLConnection connection = (HttpURLConnection) uri.openConnection();
+            HttpsURLConnection connection = (HttpsURLConnection) uri.openConnection();
             connection.setRequestMethod( "GET" );
+            connection.setConnectTimeout( 8000 );
             connection.connect();
-            mIs = connection.getInputStream();
-            Bitmap bitmap = BitmapFactory.decodeStream( mIs );
 
-            return bitmap;
+            int responseCode = connection.getResponseCode();
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                mIs = connection.getInputStream();
+                Bitmap bitmap = BitmapFactory.decodeStream( mIs );
+
+                return bitmap;
+            }else{
+                Log.v("jeff","responsecode---> " +responseCode );
+            }
+
 
         } catch (ProtocolException e) {
             e.printStackTrace();

@@ -28,6 +28,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.net.ssl.HttpsURLConnection;
+
 public class SecondActivity extends AppCompatActivity {
 
     private RecyclerView mRecyclerView;
@@ -46,18 +48,18 @@ public class SecondActivity extends AppCompatActivity {
 
         initView();
 
-
         setAdapter();
 
         loadJson();
+
         SecondPageToolBar();
 
     }
 
     private void SecondPageToolBar() {
-
+        //ToolBar返回上一頁按鈕
         setSupportActionBar( mSecPageToolBar );
-
+        //監聽點擊事件
         mSecPageToolBar.setNavigationOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,7 +71,8 @@ public class SecondActivity extends AppCompatActivity {
 
 
     private void setAdapter() {
-
+        //創建Adapter
+        //設置Adapter
         GridLayoutManager gridLayoutManager = new GridLayoutManager( this, 4 );
         gridLayoutManager.setOrientation( GridLayoutManager.VERTICAL );
         mRecyclerView.setLayoutManager( gridLayoutManager );
@@ -78,26 +81,29 @@ public class SecondActivity extends AppCompatActivity {
     }
 
     private void showList() {
-
+        //更新UI
         mSecAdapter.notifyDataSetChanged();
 
     }
 
     private void initView() {
-
+        //初始化元件
         mRecyclerView = findViewById( R.id.recycler_view );
         mSecPageToolBar = findViewById( R.id.sec_page_tool_bar );
     }
 
     private void loadJson() {
 
+        //設置URL
         final String loadData = "http://jsonplaceholder.typicode.com/photos";
 
+        //使用Thread + HttpURLConnection接API
         new Thread( new Runnable() {
 
             @Override
             public void run() {
 
+                //創建ArrayList對象
                 mList = new ArrayList<>();
 
                 try {
@@ -132,11 +138,12 @@ public class SecondActivity extends AppCompatActivity {
                         mHashMap.put( "id", id );
                         mHashMap.put( "title", title );
                         mHashMap.put( "url", url );
-                        mHashMap.put( "thumbnailUrl", thumbnailUrl );
+                        mHashMap.put( "thumbnailUrl",thumbnailUrl);
 
                         mList.add( mHashMap );
                     }
 
+                    //更新UI
                     runOnUiThread( new Runnable() {
                         @Override
                         public void run() {
