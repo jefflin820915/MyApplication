@@ -17,6 +17,7 @@ import java.net.URL;
 public class LoadThumbnailUrlImage extends AsyncTask<String, Void, Bitmap> {
 
     private final WeakReference<ImageView> imageViewReference;
+    private InputStream mIs;
 
     public LoadThumbnailUrlImage(ImageView imageView) {
 
@@ -54,8 +55,8 @@ public class LoadThumbnailUrlImage extends AsyncTask<String, Void, Bitmap> {
             HttpURLConnection connection = (HttpURLConnection) uri.openConnection();
             connection.setRequestMethod( "GET" );
             connection.connect();
-            InputStream is = connection.getInputStream();
-            Bitmap bitmap = BitmapFactory.decodeStream( is );
+            mIs = connection.getInputStream();
+            Bitmap bitmap = BitmapFactory.decodeStream( mIs );
 
             return bitmap;
 
@@ -65,6 +66,16 @@ public class LoadThumbnailUrlImage extends AsyncTask<String, Void, Bitmap> {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+
+            if (mIs != null) {
+                try {
+                    mIs.close();
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
         return null;
     }

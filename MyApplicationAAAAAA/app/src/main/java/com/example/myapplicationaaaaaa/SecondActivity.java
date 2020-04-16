@@ -36,6 +36,8 @@ public class SecondActivity extends AppCompatActivity {
     private HashMap<String, String> mHashMap;
     private JSONObject mJsonObject;
     private Toolbar mSecPageToolBar;
+    private InputStream mIs;
+    private BufferedReader mBr;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -104,16 +106,15 @@ public class SecondActivity extends AppCompatActivity {
                     connection.setConnectTimeout( 100000 );
                     connection.setRequestMethod( "GET" );
                     connection.connect();
-                    InputStream is = connection.getInputStream();
-                    BufferedReader br = new BufferedReader( new InputStreamReader( is ) );
-                    String line = br.readLine();
+                    mIs = connection.getInputStream();
+                    mBr = new BufferedReader( new InputStreamReader( mIs ) );
+                    String line = mBr.readLine();
                     StringBuffer json = new StringBuffer();
                     while (line != null) {
                         json.append( line );
-                        line = br.readLine();
+                        line = mBr.readLine();
                     }
-                    is.close();
-                    br.close();
+
 
                     Log.v( "jeff", "" + json );
 
@@ -130,7 +131,7 @@ public class SecondActivity extends AppCompatActivity {
                         mHashMap = new HashMap<>();
                         mHashMap.put( "id", id );
                         mHashMap.put( "title", title );
-                        mHashMap.put( "url",url );
+                        mHashMap.put( "url", url );
                         mHashMap.put( "thumbnailUrl", thumbnailUrl );
 
                         mList.add( mHashMap );
@@ -149,6 +150,19 @@ public class SecondActivity extends AppCompatActivity {
                     e.printStackTrace();
                 } catch (JSONException e) {
                     e.printStackTrace();
+                } finally {
+                    try {
+                        if (mIs != null) {
+
+                            mIs.close();
+                        }
+                        if (mBr != null) {
+
+                            mBr.close();
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         } ).start();
