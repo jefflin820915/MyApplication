@@ -47,8 +47,10 @@ public class LoadThumbnailUrlImage extends AsyncTask<String, Void, Bitmap> {
 
         try {
             URL uri = new URL( url );
-            HttpURLConnection urlConnection = (HttpURLConnection) uri.openConnection();
-            InputStream is = urlConnection.getInputStream();
+            HttpURLConnection connection = (HttpURLConnection) uri.openConnection();
+            connection.setRequestMethod( "GET" );
+            connection.connect();
+            InputStream is = connection.getInputStream();
             Bitmap bitmap = BitmapFactory.decodeStream( is );
 
             return bitmap;

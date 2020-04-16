@@ -81,12 +81,12 @@ public class SecondActivityAdapter extends RecyclerView.Adapter<SecondActivityAd
             @Override
             public void onClick(View v) {
 
-                itemToThirdPage( position );
+                nextToThirdPage( position );
             }
         } );
     }
 
-    private void itemToThirdPage(int position) {
+    private void nextToThirdPage(int position) {
 
         Intent intent = new Intent();
         intent.setClass( mContext, ThirdActivity.class );

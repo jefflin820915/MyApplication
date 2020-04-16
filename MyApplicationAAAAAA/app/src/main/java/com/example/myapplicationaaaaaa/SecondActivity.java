@@ -1,5 +1,6 @@
 package com.example.myapplicationaaaaaa;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -34,6 +35,7 @@ public class SecondActivity extends AppCompatActivity {
     private List<HashMap<String, String>> mList;
     private HashMap<String, String> mHashMap;
     private JSONObject mJsonObject;
+    private Toolbar mSecPageToolBar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,12 +44,26 @@ public class SecondActivity extends AppCompatActivity {
 
         initView();
 
+
         setAdapter();
 
         loadJson();
+        SecondPageToolBar();
 
     }
 
+    private void SecondPageToolBar() {
+
+        setSupportActionBar( mSecPageToolBar );
+
+        mSecPageToolBar.setNavigationOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                System.exit( 0 );
+            }
+        } );
+    }
 
 
     private void setAdapter() {
@@ -68,6 +84,7 @@ public class SecondActivity extends AppCompatActivity {
     private void initView() {
 
         mRecyclerView = findViewById( R.id.recycler_view );
+        mSecPageToolBar = findViewById( R.id.sec_page_tool_bar );
     }
 
     private void loadJson() {
