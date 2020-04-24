@@ -1,6 +1,5 @@
 package com.example.myapplicationimagepicker.adapter;
 
-import android.content.Context;
 import android.graphics.Point;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,7 +23,7 @@ public class ImageListAdapter extends RecyclerView.Adapter<ImageListAdapter.Inne
     //給個集合保存起來,即使外面清空了也不會空指針異常
     private List<ImageItem> mImageItems = new ArrayList<>(  );
 
-    private List<ImageItem> mSelecteItem = new ArrayList<>(  );
+    private List<ImageItem> mSelecteItems = new ArrayList<>(  );
 
     @NonNull
     @Override
@@ -58,9 +57,9 @@ public class ImageListAdapter extends RecyclerView.Adapter<ImageListAdapter.Inne
                 //是否選擇上
                 //如果選擇上就變成取消
                 //如果沒選擇上就選上
-                if (mSelecteItem.contains( imageItem )) {
+                if (mSelecteItems.contains( imageItem )) {
                     //已經選擇上了,應該取消選擇
-                    mSelecteItem.remove( imageItem );
+                    mSelecteItems.remove( imageItem );
 
                     //修改UI
                     checkBox.setChecked( true );
@@ -70,7 +69,7 @@ public class ImageListAdapter extends RecyclerView.Adapter<ImageListAdapter.Inne
 
                 }else {
                     //沒有選擇上,應該要選擇
-                    mSelecteItem.add( imageItem );
+                    mSelecteItems.add( imageItem );
 
                     //修改UI
                     checkBox.setChecked( false );
