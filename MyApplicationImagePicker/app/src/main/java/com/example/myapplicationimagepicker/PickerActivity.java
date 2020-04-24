@@ -60,17 +60,28 @@ import android.util.Log;
 // ============
 
 
+import com.example.myapplicationimagepicker.adapter.ImageListAdapter;
+import com.example.myapplicationimagepicker.domain.ImageItem;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 
 public class PickerActivity extends AppCompatActivity {
 
     private static final int LOADER_ID = 1;
+
+    private List<ImageItem> mImageItems = new ArrayList<>();
+    private ImageListAdapter mImageListAdapter;
 
 
     @Override
@@ -78,31 +89,30 @@ public class PickerActivity extends AppCompatActivity {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_picker );
 
-
-//        ContentResolver contentResolver = getContentResolver();
-//        //Uri imageUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-//        Uri imageUri = MediaStore.Files.getContentUri( "external" );
-//        Cursor query = contentResolver.query( imageUri, null, null, null, null );
-//        String[] columnNames = query.getColumnNames();new
-//        while (query.moveToNext()) {
-//            Log.v("jeff","=============");
-//            for (String columnName : columnNames) {
-//
-//                Log.v( "jeff", columnName + "====" + query.getString( query.getColumnIndex( columnName ) ) );
-//            }
-//
-//            Log.v( "jeff","============" );
-//        }
-//        query.close();
-
-
         initLoaderManager();
+
+        initView();
+
+    }
+
+    private void initView() {
+
+        RecyclerView listView = findViewById( R.id.image_list_view );
+
+        listView.setLayoutManager( new GridLayoutManager( this,3 ) );
+
+        //設置Adapter
+        mImageListAdapter = new ImageListAdapter();
+        listView.setAdapter(mImageListAdapter);
+
+
     }
 
     private void initLoaderManager() {
 
-        LoaderManager loadManager = LoaderManager.getInstance( this );
-        loadManager.initLoader( LOADER_ID, null, new LoaderManager.LoaderCallbacks<Cursor>() {
+        mImageItems.clear();
+        LoaderManager loaderManager = LoaderManager.getInstance( this );
+        loaderManager.initLoader( LOADER_ID, null, new LoaderManager.LoaderCallbacks<Cursor>() {
             @NonNull
             @Override
             public Loader<Cursor> onCreateLoader(int id, @Nullable Bundle args) {
@@ -110,8 +120,8 @@ public class PickerActivity extends AppCompatActivity {
                 if (id == LOADER_ID) {
 
                     return new CursorLoader( PickerActivity.this, MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                            new String[]{"_data", "_display_name", "date_added"}, null, null, "date_added DESC" );
-                }
+                        new String[]{"_data", "_display_name", "date_added"}, null, null, "date_added DESC" );
+            }
 
                 return null;
             }
@@ -119,21 +129,24 @@ public class PickerActivity extends AppCompatActivity {
             @Override
             public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
                 if (cursor != null) {
-                    while (cursor.moveToNext()) {
-                        String[] columnNames = cursor.getColumnNames();
 
                         while (cursor.moveToNext()) {
-                            Log.v( "jeff", "=============" );
 
-                            for (String columnName : columnNames) {
+                            String path = cursor.getString( 0 );
+                            String title = cursor.getString( 1 );
+                            long data = cursor.getLong( 2 );
+                            ImageItem imageItem = new ImageItem( path, title, data );
+                            mImageItems.add( imageItem );
 
-                                Log.v( "jeff", columnName + "====" + cursor.getString( cursor.getColumnIndex( columnName ) ) );
-                            }
-
-                            Log.v( "jeff", "============" );
                         }
-                    }
+
                     cursor.close();
+                    for (ImageItem mImageItem : mImageItems) {
+                        Log.v( "jeff","image --> " + mImageItem );
+                    }
+
+                    mImageListAdapter.setData(mImageItems);
+
                 }
             }
 
