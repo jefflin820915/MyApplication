@@ -50,7 +50,9 @@ public class ImageListAdapter extends RecyclerView.Adapter<ImageListAdapter.Inne
         final View cover = itemView.findViewById( R.id.image_cover );
 
         Glide.with( imageView.getContext() ).load( imageItem.getPath()).into( imageView );
-        itemView.setOnClickListener( new View.OnClickListener() {
+        //根據數據狀態顯示內容
+
+            itemView.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -73,7 +75,7 @@ public class ImageListAdapter extends RecyclerView.Adapter<ImageListAdapter.Inne
 
                     //修改UI
                     checkBox.setChecked( false );
-                    cover.setVisibility( View.VISIBLE );
+                    cover.setVisibility( View.VISIBLE);
                     checkBox.setButtonDrawable( itemView.getContext().getDrawable( R.mipmap.check ) );
 
                 }
