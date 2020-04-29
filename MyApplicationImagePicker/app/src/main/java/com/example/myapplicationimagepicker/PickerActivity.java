@@ -6,6 +6,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 
 //
 // _id====1807
@@ -62,6 +64,7 @@ import android.util.Log;
 
 import com.example.myapplicationimagepicker.adapter.ImageListAdapter;
 import com.example.myapplicationimagepicker.domain.ImageItem;
+import com.example.myapplicationimagepicker.utils.PickerConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,12 +79,14 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
-public class PickerActivity extends AppCompatActivity {
+public class PickerActivity extends AppCompatActivity implements ImageListAdapter.OnItemSelectedChangeListener {
 
     private static final int LOADER_ID = 1;
 
     private List<ImageItem> mImageItems = new ArrayList<>();
     private ImageListAdapter mImageListAdapter;
+    private TextView mFinishView;
+    private PickerConfig mPickerConfig;
 
 
     @Override
@@ -93,10 +98,47 @@ public class PickerActivity extends AppCompatActivity {
 
         initView();
 
+        initEvent();
+
+        initConfig();
+
+        
+    }
+
+    private void initConfig() {
+
+        mPickerConfig = PickerConfig.getInstance();
+        int maxSelectedCount = mPickerConfig.getMaxSelectedCount();
+        mImageListAdapter.setMAXSelectedCount( maxSelectedCount );
+
+
+
+    }
+
+    private void initEvent() {
+        mImageListAdapter.setOnItemSelectedChangeListener( this );
+        mFinishView.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //獲取到所選擇的數據
+                List<ImageItem> result = mImageListAdapter.getmSelectedItems();
+
+                //通知其他地方
+                PickerConfig.OnImageSelectedFinishedListener imageSelectedFinishedListener = mPickerConfig.getmImageSelectedFinishedListener();
+                if (imageSelectedFinishedListener!=null) {
+                    imageSelectedFinishedListener.onSelectedFinished( result );
+                }
+
+                //結束介面
+                finish();
+
+            }
+        } );
     }
 
     private void initView() {
 
+        mFinishView = this.findViewById( R.id.finish_tv );
         RecyclerView listView = findViewById( R.id.image_list_view );
 
         listView.setLayoutManager( new GridLayoutManager( this,3 ) );
@@ -155,5 +197,13 @@ public class PickerActivity extends AppCompatActivity {
 
             }
         } );
+    }
+
+    @Override
+    public void onItemSelectedChange(List<ImageItem> selectedItems) {
+
+        //所選擇的數據發生變化
+        mFinishView.setText( "("+selectedItems.size()+"/"+mImageListAdapter.getMAXSelectedCount()+")完成" );
+
     }
 }

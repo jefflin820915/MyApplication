@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.myapplicationimagepicker.R;
@@ -23,7 +24,27 @@ public class ImageListAdapter extends RecyclerView.Adapter<ImageListAdapter.Inne
     //給個集合保存起來,即使外面清空了也不會空指針異常
     private List<ImageItem> mImageItems = new ArrayList<>(  );
 
-    private List<ImageItem> mSelecteItems = new ArrayList<>(  );
+    private List<ImageItem> mSelectedItems = new ArrayList<>(  );
+    private OnItemSelectedChangeListener mItemSelectedChangeListener = null;
+
+    public static final int MAX_SELECTED_COUNT = 9;
+    private int MAXSelectedCount = MAX_SELECTED_COUNT;
+
+    public List<ImageItem> getmSelectedItems() {
+        return mSelectedItems;
+    }
+
+    public void setmSelectedItems(List<ImageItem> mSelectedItems) {
+        this.mSelectedItems = mSelectedItems;
+    }
+
+    public int getMAXSelectedCount() {
+        return MAXSelectedCount;
+    }
+
+    public void setMAXSelectedCount(int MAXSelectedCount) {
+        this.MAXSelectedCount = MAXSelectedCount;
+    }
 
     @NonNull
     @Override
@@ -46,11 +67,33 @@ public class ImageListAdapter extends RecyclerView.Adapter<ImageListAdapter.Inne
         final View itemView = holder.itemView;
         ImageView imageView = itemView.findViewById( R.id.img_iv );
         final ImageItem imageItem = mImageItems.get( position );
-        final CheckBox checkBox = imageView.findViewById( R.id.image_check_box );
+        final CheckBox checkBox = itemView.findViewById( R.id.image_check_box );
         final View cover = itemView.findViewById( R.id.image_cover );
 
         Glide.with( imageView.getContext() ).load( imageItem.getPath()).into( imageView );
+
         //根據數據狀態顯示內容
+        if (mSelectedItems.contains( imageItem )) {
+            //沒有選擇上,應該要選擇
+            mSelectedItems.add( imageItem );
+
+            //修改UI
+            checkBox.setChecked( false );
+            cover.setVisibility( View.VISIBLE);
+            checkBox.setButtonDrawable( itemView.getContext().getDrawable( R.mipmap.check ) );
+
+        }else {
+
+            //已經選擇上了,應該取消選擇
+            mSelectedItems.remove( imageItem );
+
+            //修改UI
+            checkBox.setChecked( true );
+            checkBox.setButtonDrawable( itemView.getContext().getDrawable( R.mipmap.cancel ) );
+
+            cover.setVisibility( View.GONE );
+        }
+
 
             itemView.setOnClickListener( new View.OnClickListener() {
             @Override
@@ -59,9 +102,9 @@ public class ImageListAdapter extends RecyclerView.Adapter<ImageListAdapter.Inne
                 //是否選擇上
                 //如果選擇上就變成取消
                 //如果沒選擇上就選上
-                if (mSelecteItems.contains( imageItem )) {
+                if (mSelectedItems.contains( imageItem )) {
                     //已經選擇上了,應該取消選擇
-                    mSelecteItems.remove( imageItem );
+                    mSelectedItems.remove( imageItem );
 
                     //修改UI
                     checkBox.setChecked( true );
@@ -70,8 +113,18 @@ public class ImageListAdapter extends RecyclerView.Adapter<ImageListAdapter.Inne
                     cover.setVisibility( View.GONE );
 
                 }else {
+
+                    if (mSelectedItems.size() >= MAXSelectedCount ){
+
+                        //給個提示
+                        Toast toast = Toast.makeText( checkBox.getContext(), null, Toast.LENGTH_SHORT );
+                        toast.setText( "最多可以選擇"+ MAXSelectedCount + "張圖片" );
+                        toast.show();
+                        return;
+                    }
+
                     //沒有選擇上,應該要選擇
-                    mSelecteItems.add( imageItem );
+                    mSelectedItems.add( imageItem );
 
                     //修改UI
                     checkBox.setChecked( false );
@@ -79,9 +132,24 @@ public class ImageListAdapter extends RecyclerView.Adapter<ImageListAdapter.Inne
                     checkBox.setButtonDrawable( itemView.getContext().getDrawable( R.mipmap.check ) );
 
                 }
+                if (mItemSelectedChangeListener!=null) {
+                    mItemSelectedChangeListener.onItemSelectedChange( mSelectedItems );
+                }
+
             }
         } );
     }
+
+    public void setOnItemSelectedChangeListener(OnItemSelectedChangeListener listener){
+        this.mItemSelectedChangeListener = listener;
+    }
+
+    public interface OnItemSelectedChangeListener {
+        void onItemSelectedChange(List<ImageItem> selectedItems);
+
+    }
+
+
 
     @Override
     public int getItemCount() {

@@ -9,15 +9,23 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+
+import com.example.myapplicationimagepicker.domain.ImageItem;
+import com.example.myapplicationimagepicker.utils.PickerConfig;
+
+import java.util.List;
 
 @RequiresApi(api = Build.VERSION_CODES.M)
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements PickerConfig.OnImageSelectedFinishedListener {
 
 
     private static final int PERSSION_REQUEST_CODE = 1;
+
+    public static final int MAX_SELECTED_COUNT = 9;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +33,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView( R.layout.activity_main );
 
         checkPermission();
+        initPickerConfig();
 
+    }
+
+    private void initPickerConfig() {
+        PickerConfig pickerconfig = PickerConfig.getInstance();
+        pickerconfig.setMaxSelectedCount( MAX_SELECTED_COUNT );
+        pickerconfig.setOnImageSelectedFinishedListener( this );
 
     }
 
@@ -60,5 +75,14 @@ public class MainActivity extends AppCompatActivity {
         //打開另外一個介面
         startActivity( new Intent( this,PickerActivity.class ));
 
+    }
+
+    @Override
+    public void onSelectedFinished(List<ImageItem> result) {
+        //數據回來,所選擇的圖片列表回來了
+        for (ImageItem imageItem : result) {
+
+            Log.v("jeff", "Item ---> " + imageItem);
+        }
     }
 }
