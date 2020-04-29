@@ -3,6 +3,8 @@ package com.example.myapplicationimagepicker;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.content.Intent;
@@ -12,6 +14,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import com.example.myapplicationimagepicker.adapter.ResultImageAdapter;
 import com.example.myapplicationimagepicker.domain.ImageItem;
 import com.example.myapplicationimagepicker.utils.PickerConfig;
 
@@ -26,14 +29,26 @@ public class MainActivity extends AppCompatActivity implements PickerConfig.OnIm
     private static final int PERSSION_REQUEST_CODE = 1;
 
     public static final int MAX_SELECTED_COUNT = 9;
+    private RecyclerView mResultList;
+    private ResultImageAdapter mResultImageAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_main );
 
+        initView();
+
         checkPermission();
+
         initPickerConfig();
+
+    }
+
+    private void initView() {
+        mResultList = findViewById( R.id.result_list );
+        mResultImageAdapter = new ResultImageAdapter();
+        mResultList.setAdapter( mResultImageAdapter );
 
     }
 
@@ -79,10 +94,24 @@ public class MainActivity extends AppCompatActivity implements PickerConfig.OnIm
 
     @Override
     public void onSelectedFinished(List<ImageItem> result) {
+
+        Log.v( "jeff","onSelectedFinished --> " + result );
+
         //數據回來,所選擇的圖片列表回來了
         for (ImageItem imageItem : result) {
 
             Log.v("jeff", "Item ---> " + imageItem);
         }
+
+        int     horizontalCount;
+        if (result.size() < 3) {
+            horizontalCount = result.size();
+        }else {
+
+            horizontalCount = 3;
+        }
+            mResultList.setLayoutManager( new GridLayoutManager( this,horizontalCount ) );
+            mResultImageAdapter.setData(result,horizontalCount);
+
     }
 }

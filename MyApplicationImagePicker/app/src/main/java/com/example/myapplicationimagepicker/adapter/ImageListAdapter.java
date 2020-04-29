@@ -144,6 +144,10 @@ public class ImageListAdapter extends RecyclerView.Adapter<ImageListAdapter.Inne
         this.mItemSelectedChangeListener = listener;
     }
 
+    public void release() {
+        mSelectedItems.clear();
+    }
+
     public interface OnItemSelectedChangeListener {
         void onItemSelectedChange(List<ImageItem> selectedItems);
 

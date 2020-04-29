@@ -121,10 +121,14 @@ public class PickerActivity extends AppCompatActivity implements ImageListAdapte
             @Override
             public void onClick(View v) {
                 //獲取到所選擇的數據
-                List<ImageItem> result = mImageListAdapter.getmSelectedItems();
+                List<ImageItem> result = new ArrayList<>(  );
+                result.addAll( mImageListAdapter.getmSelectedItems() );
+                mImageListAdapter.release();
 
                 //通知其他地方
                 PickerConfig.OnImageSelectedFinishedListener imageSelectedFinishedListener = mPickerConfig.getmImageSelectedFinishedListener();
+                Log.v( "jeff","OnImageSelectedFinishedListener --> " + imageSelectedFinishedListener );
+                Log.v( "jeff","result size --> " + result.size() );
                 if (imageSelectedFinishedListener!=null) {
                     imageSelectedFinishedListener.onSelectedFinished( result );
                 }
@@ -134,6 +138,14 @@ public class PickerActivity extends AppCompatActivity implements ImageListAdapte
 
             }
         } );
+            findViewById( R.id.back_place_btn ).setOnClickListener( new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            } );
+
+
     }
 
     private void initView() {
@@ -184,7 +196,7 @@ public class PickerActivity extends AppCompatActivity implements ImageListAdapte
 
                     cursor.close();
                     for (ImageItem mImageItem : mImageItems) {
-                        Log.v( "jeff","image --> " + mImageItem );
+                        //Log.v( "jeff","image --> " + mImageItem );
                     }
 
                     mImageListAdapter.setData(mImageItems);
