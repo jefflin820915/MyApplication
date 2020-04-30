@@ -38,19 +38,26 @@ public class IndicatorAdapter extends CommonNavigatorAdapter {
     @Override
     public IPagerTitleView getTitleView(Context context, final int index) {
 
+        //創建View
         ColorTransitionPagerTitleView colorTransitionPagerTitleView = new ColorTransitionPagerTitleView( context );
-        colorTransitionPagerTitleView.setNormalColor( Color.GRAY );
-        colorTransitionPagerTitleView.setSelectedColor( Color.BLACK );
+        //設置一般情況下的顏色為灰色
+        colorTransitionPagerTitleView.setNormalColor( Color.parseColor( "#aaffffff" ));
+        //設置選中情況下的顏色為白色
+        colorTransitionPagerTitleView.setSelectedColor( Color.WHITE );
+        //設置文字大小,單位sp
         colorTransitionPagerTitleView.setTextSize( 18 );
+        //設置要顯示內容
         colorTransitionPagerTitleView.setText( mTitles[index]);
+        //設置title的點擊事件,這裡的話,如果點擊title,那麼就選中下面的viewPager到對應的index裏面去
+        //當我們點擊了title的時候,下面的viewPager會對應著index進行切換內容
         colorTransitionPagerTitleView.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //mViewPager.setCurrentItem(index);
+                //切換viewPager的內容,如果index不一樣的話
                 //TODO:
             }
         } );
-
+        //把這個創建好的view返回回去
         return colorTransitionPagerTitleView;
     }
 
