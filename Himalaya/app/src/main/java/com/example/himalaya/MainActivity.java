@@ -1,12 +1,16 @@
 package com.example.himalaya;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import android.os.Bundle;
 import android.util.Log;
 
 import com.example.himalaya.adapaters.IndicatorAdapter;
+import com.example.himalaya.adapaters.MainContentAdapter;
 import com.example.himalaya.utils.LogUtil;
 import com.ximalaya.ting.android.opensdk.datatrasfer.CommonRequest;
 import com.ximalaya.ting.android.opensdk.datatrasfer.IDataCallBack;
@@ -22,7 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends FragmentActivity {
 
     private MagicIndicator mMagicIndicator;
     private ViewPager mContentPager;
@@ -32,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_main );
 
-            initView();
+        initView();
 
     }
 
@@ -45,10 +49,13 @@ public class MainActivity extends AppCompatActivity {
         CommonNavigator commonNavigator = new CommonNavigator( this );
         commonNavigator.setAdapter( adapter );
 
-
-
         //ViewPager
         mContentPager = this.findViewById( R.id.content_page );
+
+        //創建內容適配器
+        FragmentManager supportFragmentManager = getSupportFragmentManager();
+        MainContentAdapter mainContentAdapter = new MainContentAdapter( supportFragmentManager, FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT );
+        mContentPager.setAdapter( mainContentAdapter );
 
         //把ViewPager和indicator綁定到一起
         mMagicIndicator.setNavigator( commonNavigator );
