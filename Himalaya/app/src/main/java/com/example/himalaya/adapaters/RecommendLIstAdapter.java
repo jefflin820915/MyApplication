@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.himalaya.R;
+import com.squareup.picasso.Picasso;
 import com.ximalaya.ting.android.opensdk.model.album.Album;
 
 import java.util.ArrayList;
@@ -67,10 +68,21 @@ public class RecommendLIstAdapter extends RecyclerView.Adapter<RecommendLIstAdap
             //找到各個控件,設置數據
             //專輯的封面
             ImageView albumCover = itemView.findViewById( R.id.album_cover );
+            //title
+            TextView albumTitleMainTv = itemView.findViewById( R.id.album_title_main_tv );
             //描述
-            TextView titleMainTv = itemView.findViewById( R.id.album_title_main_tv );
-            TextView titleSubTv = itemView.findViewById( R.id.album_title_sub_tv);
+            TextView albumTitleSubTv = itemView.findViewById( R.id.album_title_sub_tv);
+            //播放數量
+            TextView albumPlayCount = itemView.findViewById( R.id.album_play_count );
+            //內容數量
+            TextView albumContentCount = itemView.findViewById( R.id.album_content_size );
 
+            albumTitleMainTv.setText( album.getAlbumTitle() );
+            albumTitleSubTv.setText( album.getAlbumIntro() );
+            albumPlayCount.setText( album.getPlayCount()+"");
+            albumContentCount.setText( album.getIncludeTrackCount()+"");
+
+            Picasso.with( itemView.getContext()).load( album.getCoverUrlLarge()).into( albumCover);
 
         }
     }
