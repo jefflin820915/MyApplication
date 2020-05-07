@@ -19,6 +19,7 @@ public abstract class UILoader extends FrameLayout {
     private View mSuccessView;
     private View mNetWorkErrorView;
     private View mEmptyView;
+    private OnRetryClickListener mOnRetryClickListener = null;
 
     public enum UIStatus {
         LOADING, SUCCESS, NETWORK_ERROR, EMPTY, NONE
@@ -41,7 +42,8 @@ public abstract class UILoader extends FrameLayout {
         init();
 
     }
-    public void updateStatus(UIStatus status){
+
+    public void updateStatus(UIStatus status) {
         mCurrentStatus = status;
         //更新UI一定要在主線程上
         BaseApplication.getHandler().post( new Runnable() {
@@ -75,7 +77,7 @@ public abstract class UILoader extends FrameLayout {
         //成功
         if (mSuccessView == null) {
 
-            mSuccessView = getSuccessView(this);
+            mSuccessView = getSuccessView( this );
             addView( mSuccessView );
         }
         //根據狀態設置是否可見
@@ -102,17 +104,38 @@ public abstract class UILoader extends FrameLayout {
     }
 
     private View getEmptyView() {
-        return LayoutInflater.from( getContext()).inflate( R.layout.fragment_empty_view,this,false);
+        return LayoutInflater.from( getContext() ).inflate( R.layout.fragment_empty_view, this, false );
     }
 
     private View getNetWorkErrorView() {
-        return LayoutInflater.from( getContext()).inflate( R.layout.fragment_error_view,this,false );
+        View networkError = LayoutInflater.from( getContext() ).inflate( R.layout.fragment_error_view, this, false );
+        networkError.findViewById( R.id.network_error_icon ).setOnClickListener( new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //重新獲取數據
+                if (mOnRetryClickListener != null) {
+                    mOnRetryClickListener.onRetryClick();
+                }
+            }
+        } );
+
+        return networkError;
     }
 
     protected abstract View getSuccessView(ViewGroup container);
 
 
     private View getLoadingView() {
-        return LayoutInflater.from( getContext()).inflate( R.layout.fragment_loading_view,this,false );
+        return LayoutInflater.from( getContext() ).inflate( R.layout.fragment_loading_view, this, false );
     }
+
+    public void setOnRetryClickListener(OnRetryClickListener listener){
+        this.mOnRetryClickListener = listener;
+    }
+
+    public interface OnRetryClickListener {
+        void onRetryClick();
+    }
+
+
 }

@@ -53,6 +53,18 @@ public class RecommendFragment extends BaseFragment implements IRecommendViewCal
             ((ViewGroup) mUILoader.getParent()).removeView( mUILoader );
         }
 
+        mUILoader.setOnRetryClickListener( new UILoader.OnRetryClickListener() {
+            @Override
+            public void onRetryClick() {
+                //表示網路不佳時用戶點擊重試
+                //重新獲取數據即可
+                if (mRecommendPresenter!=null) {
+                    mRecommendPresenter.getRecommendList();
+                }
+            }
+        } );
+
+
         //返回VIEW, 給介面顯示
         return mUILoader;
     }
