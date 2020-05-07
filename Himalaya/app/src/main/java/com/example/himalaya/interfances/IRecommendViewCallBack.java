@@ -13,15 +13,17 @@ public interface IRecommendViewCallBack {
     void onRecommendListLoaded(List<Album> result);
 
     /**
-     * 加載更多
-     * @param result
+     * 網路錯誤
      */
-    void onLoadMore(List<Album> result);
-
+    void onNetworkError();
 
     /**
-     * 下接加載更多的結果
-     * @param result
+     * 數據為空
      */
-    void onRefreshMore(List<Album> result);
+    void onEmpty();
+
+    /**
+     * 正在加載
+     */
+    void onLoading();
 }

@@ -10,19 +10,13 @@ import com.example.himalaya.adapaters.RecommendLIstAdapter;
 import com.example.himalaya.base.BaseFragment;
 import com.example.himalaya.interfances.IRecommendViewCallBack;
 import com.example.himalaya.presenters.RecommendPresenter;
-import com.example.himalaya.utils.Constants;
 import com.example.himalaya.utils.LogUtil;
-import com.ximalaya.ting.android.opensdk.constants.DTransferConstants;
-import com.ximalaya.ting.android.opensdk.datatrasfer.CommonRequest;
-import com.ximalaya.ting.android.opensdk.datatrasfer.IDataCallBack;
+import com.example.himalaya.views.UILoader;
 import com.ximalaya.ting.android.opensdk.model.album.Album;
-import com.ximalaya.ting.android.opensdk.model.album.GussLikeAlbumList;
 
 import net.lucode.hackware.magicindicator.buildins.UIUtil;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -35,13 +29,37 @@ public class RecommendFragment extends BaseFragment implements IRecommendViewCal
     private RecyclerView mRecommendList;
     private RecommendLIstAdapter mRecommendLIstAdapter;
     private RecommendPresenter mRecommendPresenter;
+    private UILoader mUILoader;
 
 
     @Override
-    protected View onSubViewLoaded(LayoutInflater layoutInflater, ViewGroup container) {
+    protected View onSubViewLoaded(final LayoutInflater layoutInflater, ViewGroup container) {
+
+        mUILoader = new UILoader(getContext()) {
+            @Override
+            protected View getSuccessView(ViewGroup container) {
+                return createSuccessView(layoutInflater,container);
+            }
+        };
+
+        //獲取到邏輯層的對象
+        mRecommendPresenter = RecommendPresenter.getInstance();
+        //先要設置通知接口的註冊
+        mRecommendPresenter.registerViewCallBack( this );
+        //獲取推薦列表
+        mRecommendPresenter.getRecommendList();
+
+        if (mUILoader.getParent() instanceof ViewGroup) {
+            ((ViewGroup) mUILoader.getParent()).removeView( mUILoader );
+        }
+
+        //返回VIEW, 給介面顯示
+        return mUILoader;
+    }
+
+    private View createSuccessView(LayoutInflater layoutInflater, ViewGroup container) {
         //VIEW已經加載完成
         mRootView = layoutInflater.inflate( R.layout.fragment_recommend, container,false );
-
         //recyclerview的使用
         //1.找到對應的控件
         mRecommendList = mRootView.findViewById( R.id.recommend_list );
@@ -64,14 +82,6 @@ public class RecommendFragment extends BaseFragment implements IRecommendViewCal
         mRecommendLIstAdapter = new RecommendLIstAdapter();
         mRecommendList.setAdapter( mRecommendLIstAdapter );
 
-        //獲取到邏輯層的對象
-        mRecommendPresenter = RecommendPresenter.getInstance();
-        //先要設置通知接口的註冊
-        mRecommendPresenter.registerViewCallBack( this );
-        //獲取推薦列表
-        mRecommendPresenter.getRecommendList();
-
-        //返回VIEW, 給介面顯示
         return mRootView;
     }
 
@@ -80,23 +90,34 @@ public class RecommendFragment extends BaseFragment implements IRecommendViewCal
      * 這個接口: 3.10.6 獲取猜你喜歡專輯
      */
 
-
     @Override
     public void onRecommendListLoaded(List<Album> result) {
+        LogUtil.v( "jeff","onRecommendListLoaded" );
         //當我們獲取到推薦內容的時候,這個方法就會被調用(成功了)
         //數據回來以後就是更新UI
         //把數據設置給適配器並且更新
         mRecommendLIstAdapter.setData(result);
+        mUILoader.updateStatus( UILoader.UIStatus.SUCCESS);
     }
 
     @Override
-    public void onLoadMore(List<Album> result) {
-
+    public void onNetworkError() {
+        LogUtil.v( "jeff","onNetWorkError" );
+        mUILoader.updateStatus( UILoader.UIStatus.NETWORK_ERROR );
     }
 
     @Override
-    public void onRefreshMore(List<Album> result) {
+    public void onEmpty() {
+        LogUtil.v( "jeff","onEmpty" );
 
+        mUILoader.updateStatus( UILoader.UIStatus.EMPTY );
+    }
+
+    @Override
+    public void onLoading() {
+        LogUtil.v( "jeff","onLoading" );
+
+        mUILoader.updateStatus( UILoader.UIStatus.LOADING );
     }
 
     @Override
