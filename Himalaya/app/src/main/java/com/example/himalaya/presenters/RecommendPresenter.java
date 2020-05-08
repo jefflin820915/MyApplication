@@ -91,6 +91,10 @@ public class RecommendPresenter implements IRecommendPresenter {
 
         //通知UI更新
         if (albumList!=null) {
+
+            //測試.清空一下,讓介面顯示空
+            //albumList.clear();
+
             if (albumList.size() == 0) {
                 for (IRecommendViewCallBack callBack : mCallBacks) {
                     callBack.onEmpty(  );
@@ -100,6 +104,7 @@ public class RecommendPresenter implements IRecommendPresenter {
 
                 if (mCallBacks!=null) {
                     for (IRecommendViewCallBack callBack : mCallBacks) {
+
                         callBack.onRecommendListLoaded( albumList );
                     }
                 }

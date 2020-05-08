@@ -1,10 +1,12 @@
 package com.example.himalaya.fragments;
 
+import android.content.Intent;
 import android.graphics.Rect;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.himalaya.DetailActivity;
 import com.example.himalaya.R;
 import com.example.himalaya.adapaters.RecommendLIstAdapter;
 import com.example.himalaya.base.BaseFragment;
@@ -22,7 +24,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class RecommendFragment extends BaseFragment implements IRecommendViewCallBack {
+public class RecommendFragment extends BaseFragment implements IRecommendViewCallBack, RecommendLIstAdapter.OnRecommendItemClickListner {
 
 
     private View mRootView;
@@ -93,7 +95,7 @@ public class RecommendFragment extends BaseFragment implements IRecommendViewCal
         //3.設置適配器
         mRecommendLIstAdapter = new RecommendLIstAdapter();
         mRecommendList.setAdapter( mRecommendLIstAdapter );
-
+        mRecommendLIstAdapter.setOnRecommendItemClickListner(this);
         return mRootView;
     }
 
@@ -139,5 +141,14 @@ public class RecommendFragment extends BaseFragment implements IRecommendViewCal
         if (mRecommendPresenter!=null) {
             mRecommendPresenter.unRegisterViewCallBack( this );
         }
+    }
+
+    @Override
+    public void onItemClick(int position) {
+        //item條目被點擊了,跳轉到Detail詳情頁面
+
+        Intent intent = new Intent(  );
+        intent.setClass( getContext(), DetailActivity.class );
+        startActivity( intent );
     }
 }
