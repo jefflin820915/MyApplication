@@ -20,7 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 public class RecommendLIstAdapter extends RecyclerView.Adapter<RecommendLIstAdapter.InnerHolder> {
 
     private List<Album> mData = new ArrayList<>();
-    private OnRecommendItemClickListner mItemClickListner = null;
+    private OnRecommendItemClickListener mItemClickListener = null;
 
     @NonNull
     @Override
@@ -41,13 +41,14 @@ public class RecommendLIstAdapter extends RecyclerView.Adapter<RecommendLIstAdap
             @Override
             public void onClick(View v) {
 
-                if (mItemClickListner!=null) {
-                    mItemClickListner.onItemClick( (Integer) v.getTag() );
+                if (mItemClickListener != null) {
+                    int clickPosition = (int) v.getTag();
+                    mItemClickListener.onItemClick( clickPosition, mData.get( clickPosition ) );
                 }
-                LogUtil.v( "jeff","itemView Click ---> " + v.getTag() );
+                LogUtil.v( "jeff", "itemView Click ---> " + v.getTag() );
             }
         } );
-        holder.setData(mData.get(position));
+        holder.setData( mData.get( position ) );
     }
 
     @Override
@@ -83,7 +84,7 @@ public class RecommendLIstAdapter extends RecyclerView.Adapter<RecommendLIstAdap
             //title
             TextView albumTitleMainTv = itemView.findViewById( R.id.album_title_main_tv );
             //描述
-            TextView albumTitleSubTv = itemView.findViewById( R.id.album_title_sub_tv);
+            TextView albumTitleSubTv = itemView.findViewById( R.id.album_title_sub_tv );
             //播放數量
             TextView albumPlayCount = itemView.findViewById( R.id.album_play_count );
             //內容數量
@@ -91,23 +92,22 @@ public class RecommendLIstAdapter extends RecyclerView.Adapter<RecommendLIstAdap
 
             albumTitleMainTv.setText( album.getAlbumTitle() );
             albumTitleSubTv.setText( album.getAlbumIntro() );
-            albumPlayCount.setText( album.getPlayCount()+"");
-            albumContentCount.setText( album.getIncludeTrackCount()+"");
+            albumPlayCount.setText( album.getPlayCount() + "" );
+            albumContentCount.setText( album.getIncludeTrackCount() + "" );
 
-            Picasso.with( itemView.getContext()).load( album.getCoverUrlLarge()).into( albumCover);
+            Picasso.with( itemView.getContext() ).load( album.getCoverUrlLarge() ).into( albumCover );
 
         }
     }
 
-    public void setOnRecommendItemClickListner(OnRecommendItemClickListner listner){
-        this.mItemClickListner = listner;
+    public void setOnRecommendItemClickListener(OnRecommendItemClickListener listener) {
+        this.mItemClickListener = listener;
     }
 
 
-    public interface OnRecommendItemClickListner{
-        void onItemClick(int position);
+    public interface OnRecommendItemClickListener {
+        void onItemClick(int position, Album album);
     }
-
 
 
 }

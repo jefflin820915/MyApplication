@@ -17,9 +17,9 @@ import java.util.Map;
 
 public class RecommendPresenter implements IRecommendPresenter {
 
-    private List<IRecommendViewCallBack> mCallBacks = new ArrayList<>(  );
+    private List<IRecommendViewCallBack> mCallBacks = new ArrayList<>();
 
-    private RecommendPresenter(){
+    private RecommendPresenter() {
 
     }
 
@@ -30,9 +30,9 @@ public class RecommendPresenter implements IRecommendPresenter {
      *
      * @return
      */
-    public static RecommendPresenter getInstance(){
-        if (sInstance ==null) {
-            synchronized (RecommendPresenter.class){
+    public static RecommendPresenter getInstance() {
+        if (sInstance == null) {
+            synchronized (RecommendPresenter.class) {
                 if (sInstance == null) {
                     sInstance = new RecommendPresenter();
                 }
@@ -51,38 +51,38 @@ public class RecommendPresenter implements IRecommendPresenter {
         Map<String, String> map = new HashMap<>();
         //這個參數表示一頁數據返回多少條
         map.put( DTransferConstants.LIKE_COUNT, Constants.RECOMMEND_COUNT + "" );
-        CommonRequest.getGuessLikeAlbum(map, new IDataCallBack<GussLikeAlbumList>() {
+        CommonRequest.getGuessLikeAlbum( map, new IDataCallBack<GussLikeAlbumList>() {
             @Override
             public void onSuccess(GussLikeAlbumList gussLikeAlbumList) {
 
-                LogUtil.v( "jeff","thread name -->"+ Thread.currentThread().getName() );
+                LogUtil.v( "jeff", "thread name -->" + Thread.currentThread().getName() );
 
                 //數據獲取成功
-                if (gussLikeAlbumList !=null) {
+                if (gussLikeAlbumList != null) {
                     List<Album> albumList = gussLikeAlbumList.getAlbumList();
 
                     //數據回來以後,更新UI
                     //upRecommendUI(albumList);
-                    handleRecommendResult(albumList);
+                    handleRecommendResult( albumList );
                 }
             }
 
             @Override
             public void onError(int i, String s) {
                 //數據獲取出錯
-                LogUtil.v( "jeff","error --> " + i );
-                LogUtil.v( "jeff","errorMsg -->" + s );
+                LogUtil.v( "jeff", "error --> " + i );
+                LogUtil.v( "jeff", "errorMsg -->" + s );
                 handleError();
 
             }
-        });
+        } );
     }
 
     private void handleError() {
 
-        if (mCallBacks!=null) {
+        if (mCallBacks != null) {
             for (IRecommendViewCallBack callBack : mCallBacks) {
-                callBack.onNetworkError(  );
+                callBack.onNetworkError();
             }
         }
     }
@@ -90,19 +90,19 @@ public class RecommendPresenter implements IRecommendPresenter {
     private void handleRecommendResult(List<Album> albumList) {
 
         //通知UI更新
-        if (albumList!=null) {
+        if (albumList != null) {
 
             //測試.清空一下,讓介面顯示空
             //albumList.clear();
 
             if (albumList.size() == 0) {
                 for (IRecommendViewCallBack callBack : mCallBacks) {
-                    callBack.onEmpty(  );
+                    callBack.onEmpty();
                 }
 
-            }else {
+            } else {
 
-                if (mCallBacks!=null) {
+                if (mCallBacks != null) {
                     for (IRecommendViewCallBack callBack : mCallBacks) {
 
                         callBack.onRecommendListLoaded( albumList );
@@ -112,11 +112,12 @@ public class RecommendPresenter implements IRecommendPresenter {
         }
     }
 
-    private void updateLoading(){
+    private void updateLoading() {
         for (IRecommendViewCallBack callBack : mCallBacks) {
-            callBack.onLoading( );
+            callBack.onLoading();
         }
     }
+
     @Override
     public void pull2RefreshMore() {
 
@@ -129,14 +130,14 @@ public class RecommendPresenter implements IRecommendPresenter {
 
     @Override
     public void registerViewCallBack(IRecommendViewCallBack callBack) {
-        if (mCallBacks!=null && !mCallBacks.contains( callBack )) {
-            mCallBacks.add(callBack );
+        if (mCallBacks != null && !mCallBacks.contains( callBack )) {
+            mCallBacks.add( callBack );
         }
     }
 
     @Override
     public void unRegisterViewCallBack(IRecommendViewCallBack callBack) {
-        if (mCallBacks!=null) {
+        if (mCallBacks != null) {
             mCallBacks.remove( mCallBacks );
         }
     }

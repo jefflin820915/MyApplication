@@ -12,7 +12,7 @@ public class SubscriptionFragment extends BaseFragment {
 
     @Override
     protected View onSubViewLoaded(LayoutInflater layoutInflater, ViewGroup container) {
-        View rootView = layoutInflater.inflate( R.layout.fragment_subscription, container,false );
+        View rootView = layoutInflater.inflate( R.layout.fragment_subscription, container, false );
 
 
         return rootView;

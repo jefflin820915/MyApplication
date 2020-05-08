@@ -129,7 +129,7 @@ public abstract class UILoader extends FrameLayout {
         return LayoutInflater.from( getContext() ).inflate( R.layout.fragment_loading_view, this, false );
     }
 
-    public void setOnRetryClickListener(OnRetryClickListener listener){
+    public void setOnRetryClickListener(OnRetryClickListener listener) {
         this.mOnRetryClickListener = listener;
     }
 

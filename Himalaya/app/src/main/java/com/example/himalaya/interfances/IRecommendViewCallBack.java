@@ -8,6 +8,7 @@ public interface IRecommendViewCallBack {
 
     /**
      * 獲取推薦內容的結果
+     *
      * @param result
      */
     void onRecommendListLoaded(List<Album> result);

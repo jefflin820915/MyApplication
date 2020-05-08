@@ -22,12 +22,14 @@ public interface IRecommendPresenter {
 
     /**
      * 這個方法用於註冊UI的回調
+     *
      * @param callBack
      */
     void registerViewCallBack(IRecommendViewCallBack callBack);
 
     /**
      * 取消UI的回調註冊
+     *
      * @param callBack
      */
     void unRegisterViewCallBack(IRecommendViewCallBack callBack);

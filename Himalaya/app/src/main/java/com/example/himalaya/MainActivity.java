@@ -35,9 +35,9 @@ public class MainActivity extends FragmentActivity {
         mIndicatorAdapter.setOnIndicatorTapClickListener( new IndicatorAdapter.OnIndicatorTapClickListener() {
             @Override
             public void onTabClick(int index) {
-                LogUtil.v( "jeff","click index is --> " + index );
-                if (mContentPager!=null) {
-                    mContentPager.setCurrentItem(index);
+                LogUtil.v( "jeff", "click index is --> " + index );
+                if (mContentPager != null) {
+                    mContentPager.setCurrentItem( index );
                 }
             }
         } );
@@ -48,7 +48,7 @@ public class MainActivity extends FragmentActivity {
         mMagicIndicator.setBackgroundColor( this.getResources().getColor( R.color.main_color ) );
 
         //創建indicator的適配器
-        mIndicatorAdapter = new IndicatorAdapter(this);
+        mIndicatorAdapter = new IndicatorAdapter( this );
         CommonNavigator commonNavigator = new CommonNavigator( this );
         commonNavigator.setAdjustMode( true );
         commonNavigator.setAdapter( mIndicatorAdapter );

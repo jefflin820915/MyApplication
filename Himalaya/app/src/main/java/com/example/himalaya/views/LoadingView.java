@@ -18,11 +18,11 @@ public class LoadingView extends ImageView {
     private boolean mNeedRotate = false;
 
     public LoadingView(Context context) {
-        this( context,null );
+        this( context, null );
     }
 
     public LoadingView(Context context, @Nullable AttributeSet attrs) {
-        this( context, attrs,0 );
+        this( context, attrs, 0 );
     }
 
     public LoadingView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
@@ -43,11 +43,11 @@ public class LoadingView extends ImageView {
             public void run() {
 
                 rotateDegree += 30;
-                rotateDegree = rotateDegree <= 360 ? rotateDegree:0;
+                rotateDegree = rotateDegree <= 360 ? rotateDegree : 0;
                 invalidate();
                 //是否繼續旋轉
                 if (mNeedRotate) {
-                    postDelayed( this,50 );
+                    postDelayed( this, 50 );
                 }
             }
         } );
@@ -67,7 +67,7 @@ public class LoadingView extends ImageView {
          * 第二個參數是旋轉的x座標
          * 第三個參數是旋轉的y座標
          */
-        canvas.rotate( rotateDegree,getWidth()/2,getHeight()/2 );
+        canvas.rotate( rotateDegree, getWidth() / 2, getHeight() / 2 );
         super.onDraw( canvas );
 
 

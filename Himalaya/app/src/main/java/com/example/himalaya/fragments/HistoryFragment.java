@@ -13,7 +13,7 @@ public class HistoryFragment extends BaseFragment {
     @Override
     protected View onSubViewLoaded(LayoutInflater layoutInflater, ViewGroup container) {
 
-        View rootView = layoutInflater.inflate( R.layout.fragment_history,container,false );
+        View rootView = layoutInflater.inflate( R.layout.fragment_history, container, false );
 
 
         return rootView;

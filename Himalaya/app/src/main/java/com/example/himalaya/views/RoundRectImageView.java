@@ -21,12 +21,12 @@ public class RoundRectImageView extends AppCompatImageView {
     @Override
     protected void onDraw(Canvas canvas) {
         if (path == null) {
-            path = new Path(  );
-            path.addRoundRect( new RectF( 0,0,getWidth(),getHeight()),roundRatio * getWidth(),roundRatio * getHeight(),Path.Direction.CW);
+            path = new Path();
+            path.addRoundRect( new RectF( 0, 0, getWidth(), getHeight() ), roundRatio * getWidth(), roundRatio * getHeight(), Path.Direction.CW );
         }
         canvas.save();
         canvas.clipPath( path );
         super.onDraw( canvas );
         canvas.restore();
-         }
+    }
 }

@@ -25,9 +25,9 @@ public class IndicatorAdapter extends CommonNavigatorAdapter {
 
     @Override
     public int getCount() {
-        if (mTitles!=null) {
+        if (mTitles != null) {
 
-         return mTitles.length;
+            return mTitles.length;
 
         }
         return 0;
@@ -40,7 +40,7 @@ public class IndicatorAdapter extends CommonNavigatorAdapter {
         ColorTransitionPagerTitleView colorTransitionPagerTitleView = new ColorTransitionPagerTitleView( context );
 
         //設置一般情況下的顏色為灰色
-        colorTransitionPagerTitleView.setNormalColor( Color.parseColor( "#aaffffff" ));
+        colorTransitionPagerTitleView.setNormalColor( Color.parseColor( "#aaffffff" ) );
 
         //設置選中情況下的顏色為白色
         colorTransitionPagerTitleView.setSelectedColor( Color.WHITE );
@@ -49,7 +49,7 @@ public class IndicatorAdapter extends CommonNavigatorAdapter {
         colorTransitionPagerTitleView.setTextSize( 18 );
 
         //設置要顯示內容
-        colorTransitionPagerTitleView.setText( mTitles[index]);
+        colorTransitionPagerTitleView.setText( mTitles[index] );
 
         //設置title的點擊事件,這裡的話,如果點擊title,那麼就選中下面的viewPager到對應的index裏面去
         //當我們點擊了title的時候,下面的viewPager會對應著index進行切換內容
@@ -71,17 +71,17 @@ public class IndicatorAdapter extends CommonNavigatorAdapter {
 
         LinePagerIndicator linePagerIndicator = new LinePagerIndicator( context );
         linePagerIndicator.setMode( LinePagerIndicator.MODE_WRAP_CONTENT );
-        linePagerIndicator.setColors( Color.parseColor( "#ffffff") );
+        linePagerIndicator.setColors( Color.parseColor( "#ffffff" ) );
         return linePagerIndicator;
 
     }
 
-    public void setOnIndicatorTapClickListener(OnIndicatorTapClickListener listener){
+    public void setOnIndicatorTapClickListener(OnIndicatorTapClickListener listener) {
         this.mOnTabClickListener = listener;
     }
 
 
-    public interface OnIndicatorTapClickListener{
+    public interface OnIndicatorTapClickListener {
         void onTabClick(int index);
     }
 
