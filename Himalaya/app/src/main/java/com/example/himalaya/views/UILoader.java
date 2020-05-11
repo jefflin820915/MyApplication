@@ -28,6 +28,7 @@ public abstract class UILoader extends FrameLayout {
     public UIStatus mCurrentStatus = UIStatus.NONE;
 
 
+    //確定入口只有一條
     public UILoader(@NonNull Context context) {
         this( context, null );
     }

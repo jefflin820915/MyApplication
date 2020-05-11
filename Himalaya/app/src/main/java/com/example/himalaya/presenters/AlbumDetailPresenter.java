@@ -9,7 +9,7 @@ import java.util.List;
 
 public class AlbumDetailPresenter implements IAlbumDetailPresenter {
 
-    private List<IAlbumDetailViewCallBack> mCallBacks = new ArrayList<>(  );
+    private List<IAlbumDetailViewCallBack> mCallBacks = new ArrayList<>();
 
     private Album mTargetAlbum = null;
 
@@ -22,8 +22,8 @@ public class AlbumDetailPresenter implements IAlbumDetailPresenter {
     public static AlbumDetailPresenter getInstance() {
 
         if (sInstance == null) {
-            synchronized (AlbumDetailPresenter.class){
-                if (sInstance ==null) {
+            synchronized (AlbumDetailPresenter.class) {
+                if (sInstance == null) {
                     sInstance = new AlbumDetailPresenter();
                 }
             }
@@ -51,7 +51,7 @@ public class AlbumDetailPresenter implements IAlbumDetailPresenter {
     public void registerViewCallBack(IAlbumDetailViewCallBack detailViewCallBack) {
         if (!mCallBacks.contains( detailViewCallBack )) {
             mCallBacks.add( detailViewCallBack );
-            if (mTargetAlbum!=null) {
+            if (mTargetAlbum != null) {
                 detailViewCallBack.onAlbumLoaded( mTargetAlbum );
             }
         }
@@ -62,7 +62,7 @@ public class AlbumDetailPresenter implements IAlbumDetailPresenter {
         mCallBacks.remove( detailViewCallBack );
     }
 
-    public void setTargetAlbum(Album targetAlbum){
+    public void setTargetAlbum(Album targetAlbum) {
         this.mTargetAlbum = targetAlbum;
     }
 

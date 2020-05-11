@@ -67,7 +67,6 @@ public class RecommendFragment extends BaseFragment implements IRecommendViewCal
             }
         } );
 
-
         //返回VIEW, 給介面顯示
         return mUILoader;
     }
@@ -83,6 +82,8 @@ public class RecommendFragment extends BaseFragment implements IRecommendViewCal
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager( getContext() );
         linearLayoutManager.setOrientation( LinearLayoutManager.VERTICAL );
         mRecommendList.setLayoutManager( linearLayoutManager );
+
+        //設置清單邊框為圓角
         mRecommendList.addItemDecoration( new RecyclerView.ItemDecoration() {
             @Override
             public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
