@@ -10,6 +10,7 @@ import androidx.appcompat.widget.AppCompatImageView;
 
 public class RoundRectImageView extends AppCompatImageView {
 
+    //自定義專輯頭像
 
     private Path path;
     private float roundRatio = 0.1f;

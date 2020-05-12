@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 
+import android.text.Editable;
 import android.util.SparseBooleanArray;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,15 +61,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                s = editText4.getText().toString();
+                String sss = editText4.getText().toString();
 
                 //HashMap<String, String> d0 = new HashMap<>();
                 //d0.put(fram[0], s );
                 //data.add( d0 );
                 //for(String cs:d0){}
 
-              adapter.add( s );
-                SaveData( "LISTS",s  );
+              adapter.add( sss );
+                SaveData( "LISTS", sss );
 
             }
         } );

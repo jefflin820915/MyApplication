@@ -11,6 +11,8 @@ import android.widget.ImageView;
 
 public class ImageBlur {
 
+    //毛玻璃效果工具類
+
     public static void makeBlur(ImageView imageView, Context context) {
         BitmapDrawable drawable = (BitmapDrawable) imageView.getDrawable();
         Bitmap bitmap = drawable.getBitmap();

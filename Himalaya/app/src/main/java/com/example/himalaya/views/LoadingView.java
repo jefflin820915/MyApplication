@@ -13,6 +13,8 @@ import androidx.annotation.Nullable;
 @SuppressLint("AppCompatCustomView")
 public class LoadingView extends ImageView {
 
+    //Loading圖示旋轉
+
     //旋轉的角度
     private int rotateDegree = 0;
     private boolean mNeedRotate = false;

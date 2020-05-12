@@ -50,7 +50,7 @@ public class RecommendPresenter implements IRecommendPresenter {
         updateLoading();
         Map<String, String> map = new HashMap<>();
         //這個參數表示一頁數據返回多少條
-        map.put( DTransferConstants.LIKE_COUNT, Constants.RECOMMEND_COUNT + "" );
+        map.put( DTransferConstants.LIKE_COUNT, Constants.COUNT_RECOMMEND + "" );
         CommonRequest.getGuessLikeAlbum( map, new IDataCallBack<GussLikeAlbumList>() {
             @Override
             public void onSuccess(GussLikeAlbumList gussLikeAlbumList) {

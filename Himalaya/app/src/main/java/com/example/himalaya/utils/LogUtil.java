@@ -4,6 +4,8 @@ import android.util.Log;
 
 public class LogUtil {
 
+    //Log工具類
+
     public static String sTAG = "LogUtil";
 
     //控制是否要输出log
