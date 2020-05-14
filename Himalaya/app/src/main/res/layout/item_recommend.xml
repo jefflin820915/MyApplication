@@ -48,7 +48,7 @@
 
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -60,13 +60,13 @@
 
                 <TextView
                     android:id="@+id/album_play_count"
-                    android:layout_width="45dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="2dp"
                     android:layout_marginTop="10dp"
                     android:text="234.5萬"
                     android:textColor="#ff848484"
-                    android:textSize="7sp" />
+                    android:textSize="12sp" />
 
             </LinearLayout>
 
@@ -86,13 +86,13 @@
 
                 <TextView
                     android:id="@+id/album_content_size"
-                    android:layout_width="45dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="2dp"
                     android:layout_marginTop="10dp"
                     android:text="23集"
                     android:textColor="#ff848484"
-                    android:textSize="7sp" />
+                    android:textSize="12sp" />
 
             </LinearLayout>
 

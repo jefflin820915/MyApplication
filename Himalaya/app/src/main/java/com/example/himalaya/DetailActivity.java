@@ -1,12 +1,14 @@
 package com.example.himalaya;
 
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.himalaya.adapaters.DetailAdapter;
 import com.example.himalaya.base.BaseActivity;
 import com.example.himalaya.interfances.IAlbumDetailViewCallBack;
 import com.example.himalaya.presenters.AlbumDetailPresenter;
@@ -18,9 +20,14 @@ import com.squareup.picasso.Picasso;
 import com.ximalaya.ting.android.opensdk.model.album.Album;
 import com.ximalaya.ting.android.opensdk.model.track.Track;
 
+import net.lucode.hackware.magicindicator.buildins.UIUtil;
+
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class DetailActivity extends BaseActivity implements IAlbumDetailViewCallBack {
 
@@ -30,6 +37,8 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
     private TextView mAlbumAuthor;
     private AlbumDetailPresenter mAlbumDetailPresenter;
     private int mCurrentPage = 1;
+    private RecyclerView mDetailRecyclerView;
+    private DetailAdapter mDetailAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,13 +59,37 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
         mSmallCover = this.findViewById( R.id.viv_small_color );
         mAlbumTitle = this.findViewById( R.id.tv_album_title );
         mAlbumAuthor = this.findViewById( R.id.tv_album_author );
+        mDetailRecyclerView = this.findViewById( R.id.detail_recycler_view );
 
+        //RecyclerView步驟:
+        // 1.設置布局管理器
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager( this );
+        mDetailRecyclerView.setLayoutManager( linearLayoutManager );
+
+        // 2.設置適配器
+        mDetailAdapter = new DetailAdapter();
+        mDetailRecyclerView.setAdapter( mDetailAdapter );
+
+        //設置item的上下間距
+        mDetailRecyclerView.addItemDecoration( new RecyclerView.ItemDecoration() {
+            @Override
+            public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
+                outRect.top = UIUtil.dip2px( view.getContext(),2 );
+                outRect.bottom = UIUtil.dip2px( view.getContext(),2 );
+                outRect.left = UIUtil.dip2px( view.getContext(),2 );
+                outRect.right = UIUtil.dip2px( view.getContext(),2 );
+
+            }
+        } );
 
     }
 
     @Override
     public void onDetailListLoaded(List<Track> tracks) {
 
+        //更新/設置UI數據
+
+        mDetailAdapter.setData(tracks);
     }
 
     @Override
