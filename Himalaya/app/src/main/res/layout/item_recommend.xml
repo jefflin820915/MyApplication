@@ -52,8 +52,8 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_width="6dp"
-                    android:layout_height="6dp"
+                    android:layout_width="8dp"
+                    android:layout_height="8dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginTop="5dp"
                     android:src="@mipmap/play_info_icon" />
@@ -78,8 +78,8 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_width="6dp"
-                    android:layout_height="6dp"
+                    android:layout_width="8dp"
+                    android:layout_height="8dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginTop="5dp"
                     android:src="@mipmap/ic_sound" />
