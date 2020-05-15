@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.himalaya.R;
 import com.ximalaya.ting.android.opensdk.model.track.Track;
@@ -32,10 +33,10 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.InnerHolde
     }
 
     @Override
-    public void onBindViewHolder(@NonNull DetailAdapter.InnerHolder holder, int position) {
+    public void onBindViewHolder(@NonNull DetailAdapter.InnerHolder holder, final int position) {
 
         //找到控件,設置數據
-        View itemView = holder.itemView;
+        final View itemView = holder.itemView;
 
         //順序ID
         TextView itemIdTv = itemView.findViewById( R.id.item_id_text );
@@ -61,6 +62,14 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.InnerHolde
         String updateTimeDateText = mUpdateDateFormat.format( track.getUpdatedAt() );
         updateTimeDateTv.setText(updateTimeDateText);
 
+        //設置點擊事件
+        itemView.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO:
+                Toast.makeText( v.getContext(),"you click " + position + " item" ,Toast.LENGTH_SHORT ).show();
+            }
+        } );
     }
 
     @Override

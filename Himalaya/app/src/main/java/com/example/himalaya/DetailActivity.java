@@ -4,7 +4,10 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,6 +18,7 @@ import com.example.himalaya.presenters.AlbumDetailPresenter;
 import com.example.himalaya.utils.ImageBlur;
 import com.example.himalaya.utils.LogUtil;
 import com.example.himalaya.views.RoundRectImageView;
+import com.example.himalaya.views.UILoader;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.ximalaya.ting.android.opensdk.model.album.Album;
@@ -29,7 +33,7 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class DetailActivity extends BaseActivity implements IAlbumDetailViewCallBack {
+public class DetailActivity extends BaseActivity implements IAlbumDetailViewCallBack, UILoader.OnRetryClickListener {
 
     private ImageView mLargeCover;
     private RoundRectImageView mSmallCover;
@@ -39,6 +43,10 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
     private int mCurrentPage = 1;
     private RecyclerView mDetailRecyclerView;
     private DetailAdapter mDetailAdapter;
+    private FrameLayout mDetailListContainer;
+    private UILoader mUiLoader;
+
+    private long mCurrentId = -1;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,11 +63,35 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
     }
 
     private void initView() {
+        mDetailListContainer = this.findViewById( R.id.detail_list_container );
+        //
+
+        if (mUiLoader == null) {
+
+            mUiLoader = new UILoader( this ) {
+                @Override
+                protected View getSuccessView(ViewGroup container) {
+
+                    return createSuccessView( container );
+                }
+            };
+
+            mDetailListContainer.removeAllViews();
+            mDetailListContainer.addView( mUiLoader );
+            mUiLoader.setOnRetryClickListener( DetailActivity.this );
+        }
+
         mLargeCover = this.findViewById( R.id.iv_large_cover );
         mSmallCover = this.findViewById( R.id.viv_small_color );
         mAlbumTitle = this.findViewById( R.id.tv_album_title );
         mAlbumAuthor = this.findViewById( R.id.tv_album_author );
-        mDetailRecyclerView = this.findViewById( R.id.detail_recycler_view );
+
+    }
+
+    private View createSuccessView(ViewGroup container) {
+        View detailListView = LayoutInflater.from( this ).inflate( R.layout.item_detail_list, container, false );
+
+        mDetailRecyclerView = detailListView.findViewById( R.id.detail_recycler_view );
 
         //RecyclerView步驟:
         // 1.設置布局管理器
@@ -74,22 +106,41 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
         mDetailRecyclerView.addItemDecoration( new RecyclerView.ItemDecoration() {
             @Override
             public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
-                outRect.top = UIUtil.dip2px( view.getContext(),2 );
-                outRect.bottom = UIUtil.dip2px( view.getContext(),2 );
-                outRect.left = UIUtil.dip2px( view.getContext(),2 );
-                outRect.right = UIUtil.dip2px( view.getContext(),2 );
+                outRect.top = UIUtil.dip2px( view.getContext(), 2 );
+                outRect.bottom = UIUtil.dip2px( view.getContext(), 2 );
+                outRect.left = UIUtil.dip2px( view.getContext(), 2 );
+                outRect.right = UIUtil.dip2px( view.getContext(), 2 );
 
             }
         } );
 
+        return detailListView;
     }
 
     @Override
     public void onDetailListLoaded(List<Track> tracks) {
 
-        //更新/設置UI數據
+        //判斷結果,根據結果顯示UI控制
+        if (tracks == null || tracks.size() == 0) {
+            if (mUiLoader != null) {
+                mUiLoader.updateStatus( UILoader.UIStatus.EMPTY );
+            }
+        }
 
-        mDetailAdapter.setData(tracks);
+        if (mUiLoader != null) {
+
+            mUiLoader.updateStatus( UILoader.UIStatus.SUCCESS );
+
+        }
+
+        //更新/設置UI數據
+        mDetailAdapter.setData( tracks );
+    }
+
+    @Override
+    public void onNetworkError(int errorCode, String errorMsg) {
+        //請求發生錯誤,顯示網路異常狀態
+        mUiLoader.updateStatus( UILoader.UIStatus.NETWORK_ERROR );
     }
 
     @Override
@@ -98,8 +149,18 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
         long id = album.getId();
         LogUtil.v( "jeff", "albumId --> " + id );
 
+        mCurrentId = id;
+
         //獲取專輯詳情的內容
-        mAlbumDetailPresenter.getAlbumDetail( (int) id, mCurrentPage );
+        if (mAlbumDetailPresenter != null) {
+
+            mAlbumDetailPresenter.getAlbumDetail( (int) id, mCurrentPage );
+        }
+
+        //拿數據, 顯示loading狀態
+        if (mUiLoader != null) {
+            mUiLoader.updateStatus( UILoader.UIStatus.LOADING );
+        }
 
         if (mAlbumTitle != null) {
             mAlbumTitle.setText( album.getAlbumTitle() );
@@ -131,5 +192,14 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
         if (mSmallCover != null) {
             Picasso.with( this ).load( album.getCoverUrlLarge() ).into( mSmallCover );
         }
+    }
+
+    @Override
+    public void onRetryClick() {
+        //這裡面表示用戶網路不佳的時候去點擊了重新加載
+        if (mAlbumDetailPresenter != null) {
+            mAlbumDetailPresenter.getAlbumDetail( (int) mCurrentId, mCurrentPage );
+        }
+
     }
 }

@@ -65,22 +65,35 @@ public class AlbumDetailPresenter implements IAlbumDetailPresenter {
             @Override
             public void onSuccess(TrackList trackList) {
 
-                LogUtil.v( "jeff","current Thread --> " + Thread.currentThread().getName() );
+                LogUtil.v( "jeff", "current Thread --> " + Thread.currentThread().getName() );
 
                 if (trackList != null) {
                     List<Track> tracks = trackList.getTracks();
-                    LogUtil.v( "jeff","tracks size --> " + tracks.size() );
-                    handlerAlbumDetailResult(tracks);
+                    LogUtil.v( "jeff", "tracks size --> " + tracks.size() );
+                    handlerAlbumDetailResult( tracks );
 
                 }
             }
 
             @Override
             public void onError(int errorCode, String errorMsg) {
-                LogUtil.v( "jeff","errorCode --> " + errorCode );
-                LogUtil.v( "jeff","errorMsg --> " + errorMsg );
+                LogUtil.v( "jeff", "errorCode --> " + errorCode );
+                LogUtil.v( "jeff", "errorMsg --> " + errorMsg );
+                handlerError( errorCode, errorMsg );
             }
         } );
+    }
+
+
+    /**
+     * 如果是發生錯誤,那麼就通知UI
+     * @param errorCode
+     * @param errorMsg
+     */
+    private void handlerError(int errorCode, String errorMsg) {
+        for (IAlbumDetailViewCallBack mCallBack : mCallBacks) {
+            mCallBack.onNetworkError( errorCode, errorMsg );
+        }
     }
 
     private void handlerAlbumDetailResult(List<Track> tracks) {
