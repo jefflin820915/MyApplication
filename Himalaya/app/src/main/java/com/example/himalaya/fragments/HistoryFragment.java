@@ -16,5 +16,6 @@ public class HistoryFragment extends BaseFragment {
         View rootView = layoutInflater.inflate( R.layout.fragment_history, container, false );
 
         return rootView;
+
     }
 }
