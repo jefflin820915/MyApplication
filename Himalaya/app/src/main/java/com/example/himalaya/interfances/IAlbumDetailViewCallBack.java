@@ -14,10 +14,12 @@ public interface IAlbumDetailViewCallBack {
      */
     void onDetailListLoaded(List<Track> tracks);
 
+
     /**
      * 請求發生錯誤,顯示網路異常狀態
      */
     void onNetworkError(int errorCode, String errorMsg);
+
 
 
 

@@ -23,6 +23,7 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.InnerHolde
     //格式化時間
     private SimpleDateFormat mUpdateDateFormat = new SimpleDateFormat( "yyyy-MM-dd" );
     private SimpleDateFormat mDurationFormat = new SimpleDateFormat( "mm:ss" );
+    private ItemClickListener mItemClickListener = null;
 
     @NonNull
     @Override
@@ -67,7 +68,12 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.InnerHolde
             @Override
             public void onClick(View v) {
                 //TODO:
-                Toast.makeText( v.getContext(),"you click " + position + " item" ,Toast.LENGTH_SHORT ).show();
+                //Toast.makeText( v.getContext(),"you click " + position + " item" ,Toast.LENGTH_SHORT ).show();
+
+                if (mItemClickListener != null) {
+                    mItemClickListener.onItemClick();
+                }
+
             }
         } );
     }
@@ -92,4 +98,16 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.InnerHolde
             super( itemView );
         }
     }
+
+    public void setItemClickListener(ItemClickListener listener){
+        this.mItemClickListener = listener;
+    }
+
+    public interface ItemClickListener{
+        void onItemClick();
+    }
+
+
+
+
 }

@@ -1,5 +1,6 @@
 package com.example.himalaya;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
@@ -33,7 +34,7 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class DetailActivity extends BaseActivity implements IAlbumDetailViewCallBack, UILoader.OnRetryClickListener {
+public class DetailActivity extends BaseActivity implements IAlbumDetailViewCallBack, UILoader.OnRetryClickListener, DetailAdapter.ItemClickListener {
 
     private ImageView mLargeCover;
     private RoundRectImageView mSmallCover;
@@ -114,6 +115,7 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
             }
         } );
 
+        mDetailAdapter.setItemClickListener(this);
         return detailListView;
     }
 
@@ -200,6 +202,15 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
         if (mAlbumDetailPresenter != null) {
             mAlbumDetailPresenter.getAlbumDetail( (int) mCurrentId, mCurrentPage );
         }
+
+    }
+
+    @Override
+    public void onItemClick() {
+        //TODO:跳轉到播放器介面
+        Intent intent = new Intent();
+        intent.setClass(this,PlayerActivity.class);
+        startActivity(intent);
 
     }
 }
