@@ -4,7 +4,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.himalaya.R;
 import com.ximalaya.ting.android.opensdk.model.track.Track;
@@ -71,7 +70,8 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.InnerHolde
                 //Toast.makeText( v.getContext(),"you click " + position + " item" ,Toast.LENGTH_SHORT ).show();
 
                 if (mItemClickListener != null) {
-                    mItemClickListener.onItemClick();
+                    //參數需要有列表和位置
+                    mItemClickListener.onItemClick(mDetailData,position);
                 }
 
             }
@@ -104,7 +104,7 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.InnerHolde
     }
 
     public interface ItemClickListener{
-        void onItemClick();
+        void onItemClick(List<Track> mDetailData, int position);
     }
 
 

@@ -16,6 +16,7 @@ import com.example.himalaya.adapaters.DetailAdapter;
 import com.example.himalaya.base.BaseActivity;
 import com.example.himalaya.interfances.IAlbumDetailViewCallBack;
 import com.example.himalaya.presenters.AlbumDetailPresenter;
+import com.example.himalaya.presenters.PlayerPresenter;
 import com.example.himalaya.utils.ImageBlur;
 import com.example.himalaya.utils.LogUtil;
 import com.example.himalaya.views.RoundRectImageView;
@@ -206,7 +207,11 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
     }
 
     @Override
-    public void onItemClick() {
+    public void onItemClick(List<Track> mDetailData, int position) {
+        //設置播放器的數據
+        PlayerPresenter playerPresenter = PlayerPresenter.getPlayerPresenter();
+        playerPresenter.setPlayList(mDetailData,position);
+
         //TODO:跳轉到播放器介面
         Intent intent = new Intent();
         intent.setClass(this,PlayerActivity.class);

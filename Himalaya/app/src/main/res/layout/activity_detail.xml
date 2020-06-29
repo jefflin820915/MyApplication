@@ -51,7 +51,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="12dp"
             android:layout_toRightOf="@+id/detail_play_control"
-            android:text="繼續撥放"
+            android:text="繼續播放"
             android:textSize="14sp" />
 
         <TextView
