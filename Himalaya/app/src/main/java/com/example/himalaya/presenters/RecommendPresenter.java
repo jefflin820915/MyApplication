@@ -44,7 +44,6 @@ public class RecommendPresenter implements IRecommendPresenter {
 
     @Override
     public void getRecommendList() {
-
         //獲取推薦內容
         //封裝參數
         updateLoading();

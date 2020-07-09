@@ -22,6 +22,7 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.InnerHolde
     //格式化時間
     private SimpleDateFormat mUpdateDateFormat = new SimpleDateFormat( "yyyy-MM-dd" );
     private SimpleDateFormat mDurationFormat = new SimpleDateFormat( "mm:ss" );
+
     private ItemClickListener mItemClickListener = null;
 
     @NonNull

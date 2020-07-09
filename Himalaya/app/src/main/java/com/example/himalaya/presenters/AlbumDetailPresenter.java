@@ -1,7 +1,5 @@
 package com.example.himalaya.presenters;
 
-import android.util.Log;
-
 import com.example.himalaya.interfances.IAlbumDetailPresenter;
 import com.example.himalaya.interfances.IAlbumDetailViewCallBack;
 import com.example.himalaya.utils.Constants;
@@ -57,65 +55,66 @@ public class AlbumDetailPresenter implements IAlbumDetailPresenter {
     public void getAlbumDetail(int albumId, int page) {
         //去根據頁碼和album獲取列表
         Map<String, String> map = new HashMap<>();
-        map.put( DTransferConstants.ALBUM_ID, albumId + "" );
-        map.put( DTransferConstants.SORT, "asc" );
-        map.put( DTransferConstants.PAGE, page + "" );
-        map.put( DTransferConstants.PAGE_SIZE, Constants.COUNT_DEFAULT + "" );
-        CommonRequest.getTracks( map, new IDataCallBack<TrackList>() {
+        map.put(DTransferConstants.ALBUM_ID, albumId + "");
+        map.put(DTransferConstants.SORT, "asc");
+        map.put(DTransferConstants.PAGE, page + "");
+        map.put(DTransferConstants.PAGE_SIZE, Constants.COUNT_DEFAULT + "");
+        CommonRequest.getTracks(map, new IDataCallBack<TrackList>() {
             @Override
             public void onSuccess(TrackList trackList) {
 
-                LogUtil.v( "jeff", "current Thread --> " + Thread.currentThread().getName() );
+                LogUtil.v("jeff", "current Thread --> " + Thread.currentThread().getName());
 
                 if (trackList != null) {
                     List<Track> tracks = trackList.getTracks();
-                    LogUtil.v( "jeff", "tracks size --> " + tracks.size() );
-                    handlerAlbumDetailResult( tracks );
+                    LogUtil.v("jeff", "tracks size --> " + tracks.size());
+                    handlerAlbumDetailResult(tracks);
 
                 }
             }
 
             @Override
             public void onError(int errorCode, String errorMsg) {
-                LogUtil.v( "jeff", "errorCode --> " + errorCode );
-                LogUtil.v( "jeff", "errorMsg --> " + errorMsg );
-                handlerError( errorCode, errorMsg );
+                LogUtil.v("jeff", "errorCode --> " + errorCode);
+                LogUtil.v("jeff", "errorMsg --> " + errorMsg);
+                handlerError(errorCode, errorMsg);
             }
-        } );
+        });
     }
 
 
     /**
      * 如果是發生錯誤,那麼就通知UI
+     *
      * @param errorCode
      * @param errorMsg
      */
     private void handlerError(int errorCode, String errorMsg) {
         for (IAlbumDetailViewCallBack mCallBack : mCallBacks) {
-            mCallBack.onNetworkError( errorCode, errorMsg );
+            mCallBack.onNetworkError(errorCode, errorMsg);
         }
     }
 
     private void handlerAlbumDetailResult(List<Track> tracks) {
 
         for (IAlbumDetailViewCallBack mCallBack : mCallBacks) {
-            mCallBack.onDetailListLoaded( tracks );
+            mCallBack.onDetailListLoaded(tracks);
         }
     }
 
     @Override
     public void registerViewCallBack(IAlbumDetailViewCallBack detailViewCallBack) {
-        if (!mCallBacks.contains( detailViewCallBack )) {
-            mCallBacks.add( detailViewCallBack );
+        if (!mCallBacks.contains(detailViewCallBack)) {
+            mCallBacks.add(detailViewCallBack);
             if (mTargetAlbum != null) {
-                detailViewCallBack.onAlbumLoaded( mTargetAlbum );
+                detailViewCallBack.onAlbumLoaded(mTargetAlbum);
             }
         }
     }
 
     @Override
     public void unRegisterViewCallBack(IAlbumDetailViewCallBack detailViewCallBack) {
-        mCallBacks.remove( detailViewCallBack );
+        mCallBacks.remove(detailViewCallBack);
 
     }
 

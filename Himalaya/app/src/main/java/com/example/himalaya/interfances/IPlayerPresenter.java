@@ -30,12 +30,13 @@ public interface IPlayerPresenter extends IBasePresenter<IPlayerCallBack> {
     void playPre();
 
     /**
-     *  下一首
+     * 下一首
      */
     void playNext();
 
     /**
-     *  切換播放模式
+     * 切換播放模式
+     *
      * @param mode
      */
 
@@ -49,6 +50,7 @@ public interface IPlayerPresenter extends IBasePresenter<IPlayerCallBack> {
 
     /**
      * 根據節目的位置進行播放
+     *
      * @param index 節目在列表中的位置
      */
 
@@ -57,10 +59,17 @@ public interface IPlayerPresenter extends IBasePresenter<IPlayerCallBack> {
 
     /**
      * 切換播放進度
+     *
      * @param progress
      */
 
     void SeekTo(int progress);
 
 
+    /**
+     * 判斷播放器是否在播放
+     *
+     * @return
+     */
+    boolean isPlay();
 }
