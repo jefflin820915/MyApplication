@@ -3,6 +3,7 @@ package com.example.himalaya;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -10,6 +11,7 @@ import androidx.annotation.Nullable;
 import com.example.himalaya.base.BaseActivity;
 import com.example.himalaya.interfances.IPlayerCallBack;
 import com.example.himalaya.presenters.PlayerPresenter;
+import com.example.himalaya.utils.LogUtil;
 import com.ximalaya.ting.android.opensdk.model.track.Track;
 import com.ximalaya.ting.android.opensdk.player.service.XmPlayListControl;
 
@@ -24,6 +26,11 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallBack {
     private SimpleDateFormat mHourFormat = new SimpleDateFormat("hh:mm:ss");
     private TextView mTotalDuration;
     private TextView mCurrentPosition;
+    private SeekBar mTrackSeekBar;
+    private int mCurrentProgress = 0 ;
+    private boolean mIsUserTouchProgressBar = false;
+    private ImageView mPlayNext;
+    private ImageView mPlayPre;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -84,6 +91,51 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallBack {
                 }
             }
         });
+
+        mTrackSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (fromUser) {
+                    mCurrentProgress = progress;
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+                mIsUserTouchProgressBar = true;
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                mIsUserTouchProgressBar = false;
+                //手離開拖動進度條的時候更新進度
+                mPlayerPresenter.SeekTo(mCurrentProgress);
+            }
+        });
+
+        mPlayPre.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //播放上一首
+                if (mPlayerPresenter != null) {
+                    mPlayerPresenter.playPre();
+                }
+
+            }
+        });
+
+        mPlayNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //播放下一首
+                if (mPlayerPresenter!=null) {
+                    mPlayerPresenter.playNext();
+                }
+
+            }
+        });
+
     }
 
     /**
@@ -94,7 +146,9 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallBack {
         mControlBtn = this.findViewById(R.id.play_or_pause_btn);
         mTotalDuration = this.findViewById(R.id.track_duration);
         mCurrentPosition = this.findViewById(R.id.current_position);
-
+        mTrackSeekBar = this.findViewById(R.id.track_seek_bar);
+        mPlayNext = this.findViewById(R.id.play_next);
+        mPlayPre = this.findViewById(R.id.play_pre);
 
     }
 
@@ -153,7 +207,9 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallBack {
     }
 
     @Override
-    public void onProgressChange(long currentProgress, long total) {
+    public void onProgressChange(int currentDuration, int total) {
+
+        mTrackSeekBar.setMax(total);
 
         //更新播放進度, 更新進度條
         String totalDuration;
@@ -161,10 +217,10 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallBack {
 
         if (total > 1000 * 60 * 60) {
             totalDuration = mHourFormat.format(total);
-            currentPosition = mHourFormat.format(currentProgress);
+            currentPosition = mHourFormat.format(currentDuration);
         } else {
             totalDuration = mMinFormat.format(total);
-            currentPosition = mMinFormat.format(currentProgress);
+            currentPosition = mMinFormat.format(currentDuration);
         }
 
         if (mTotalDuration != null) {
@@ -177,8 +233,10 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallBack {
         }
 
         //更新進度
-        //TODO:
-
+        //計算當前的進度
+        if (!mIsUserTouchProgressBar) {
+            mTrackSeekBar.setProgress(currentDuration);
+        }
     }
 
 

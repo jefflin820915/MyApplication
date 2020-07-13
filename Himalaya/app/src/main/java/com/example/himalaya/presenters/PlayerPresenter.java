@@ -89,12 +89,18 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
 
     @Override
     public void playPre() {
-
+        //播放上一首
+        if (mPlayerManager!=null) {
+            mPlayerManager.playPre();
+        }
     }
 
     @Override
     public void playNext() {
-
+        //播放下一首
+        if (mPlayerManager!=null) {
+            mPlayerManager.playNext();
+        }
     }
 
     @Override
@@ -115,6 +121,8 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
     @Override
     public void SeekTo(int progress) {
 
+        //更新播放器的進度
+        mPlayerManager.seekTo(progress);
     }
 
     @Override
