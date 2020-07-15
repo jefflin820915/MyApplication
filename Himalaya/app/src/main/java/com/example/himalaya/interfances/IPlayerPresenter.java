@@ -72,4 +72,5 @@ public interface IPlayerPresenter extends IBasePresenter<IPlayerCallBack> {
      * @return
      */
     boolean isPlay();
+
 }

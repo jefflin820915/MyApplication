@@ -1,13 +1,16 @@
 package com.example.himalaya;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.viewpager.widget.ViewPager;
 
+import com.example.himalaya.adapaters.PlayerTrackPageAdapter;
 import com.example.himalaya.base.BaseActivity;
 import com.example.himalaya.interfances.IPlayerCallBack;
 import com.example.himalaya.presenters.PlayerPresenter;
@@ -27,10 +30,14 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallBack {
     private TextView mTotalDuration;
     private TextView mCurrentPosition;
     private SeekBar mTrackSeekBar;
-    private int mCurrentProgress = 0 ;
+    private int mCurrentProgress = 0;
     private boolean mIsUserTouchProgressBar = false;
     private ImageView mPlayNext;
     private ImageView mPlayPre;
+    private TextView mTrackTitle;
+    private String mTrackTitleText;
+    private ViewPager mTrackPagerView;
+    private PlayerTrackPageAdapter mTrackPageAdapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -40,7 +47,11 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallBack {
         mPlayerPresenter = PlayerPresenter.getPlayerPresenter();
         mPlayerPresenter.registerViewCallBack(this);
 
+
         initView();
+
+        //在介面初始化以後才去獲取數據
+        mPlayerPresenter.getPlayList();
 
         initEvent();
 
@@ -129,7 +140,7 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallBack {
             @Override
             public void onClick(View v) {
                 //播放下一首
-                if (mPlayerPresenter!=null) {
+                if (mPlayerPresenter != null) {
                     mPlayerPresenter.playNext();
                 }
 
@@ -149,6 +160,17 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallBack {
         mTrackSeekBar = this.findViewById(R.id.track_seek_bar);
         mPlayNext = this.findViewById(R.id.play_next);
         mPlayPre = this.findViewById(R.id.play_pre);
+
+        mTrackTitle = this.findViewById(R.id.track_title);
+        if (!TextUtils.isEmpty(mTrackTitleText)) {
+            mTrackTitle.setText(mTrackTitleText);
+        }
+
+        mTrackPagerView = this.findViewById(R.id.track_pager_view);
+        //創建適配器
+        mTrackPageAdapter = new PlayerTrackPageAdapter();
+        //設置適配器
+        mTrackPagerView.setAdapter(mTrackPageAdapter);
 
     }
 
@@ -199,6 +221,13 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallBack {
     @Override
     public void onListLoad(List<Track> list) {
 
+        LogUtil.v("jeff", "list --> " + list);
+        //把數據到適配器裡
+        if (mTrackPageAdapter != null) {
+
+            mTrackPageAdapter.setData(list);
+        }
+
     }
 
     @Override
@@ -248,6 +277,19 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallBack {
     @Override
     public void onAdFinished() {
 
+    }
+
+    @Override
+    public void onTrackUpdate(Track track) {
+
+        this.mTrackTitleText = track.getTrackTitle();
+
+        if (mTrackTitle != null) {
+            //設置當前節目的標題
+            mTrackTitle.setText(mTrackTitleText);
+        }
+        //當節目改變的時候,就獲取到當前播放器中改變的位置
+        //
     }
 }
 

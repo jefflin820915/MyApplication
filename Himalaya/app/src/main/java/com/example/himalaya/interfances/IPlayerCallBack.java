@@ -84,4 +84,15 @@ public interface IPlayerCallBack {
 
     void onAdFinished();
 
+
+    /**
+     * 更新當前節目
+     * @param track 節目
+     *
+     */
+
+    void onTrackUpdate(Track track);
+
+
 }
+

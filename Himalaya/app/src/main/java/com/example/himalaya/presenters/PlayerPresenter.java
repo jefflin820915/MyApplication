@@ -26,6 +26,7 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
 
 
     private XmPlayerManager mPlayerManager;
+    private Track mCurrentTrack;
 
     private PlayerPresenter() {
 
@@ -58,6 +59,9 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
         if (mPlayerManager != null) {
             mPlayerManager.setPlayList(list, playIndex);
             isPlayListSet = true;
+            mCurrentTrack = list.get(playIndex);
+
+
         } else {
             LogUtil.v("jeff", "mPlayerManager is null");
         }
@@ -111,6 +115,13 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
     @Override
     public void getPlayList() {
 
+        if (mPlayerManager != null) {
+
+            List<Track> playList = mPlayerManager.getPlayList();
+            for (IPlayerCallBack mIPlayerCallback : mIPlayerCallbacks) {
+                mIPlayerCallback.onListLoad(playList);
+            }
+        }
     }
 
     @Override
@@ -134,6 +145,8 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
 
     @Override
     public void registerViewCallBack(IPlayerCallBack iPlayerCallBack) {
+
+        iPlayerCallBack.onTrackUpdate(mCurrentTrack);
 
         if (!mIPlayerCallbacks.contains(iPlayerCallBack)) {
 
@@ -249,9 +262,38 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
     }
 
     @Override
-    public void onSoundSwitch(PlayableModel playableModel, PlayableModel playableModel1) {
+    public void onSoundSwitch(PlayableModel lastModel, PlayableModel curModel1) {
 
-        LogUtil.v("jeff", "");
+        LogUtil.v("jeff", "onSoundSwitch...");
+
+        if (lastModel != null) {
+
+            LogUtil.v("jeff", "lastModel..." + lastModel.getKind());
+
+        }
+            LogUtil.v("jeff", "curModel1..." + curModel1.getKind());
+
+        //curModel代表的是是當前播放的內容
+        //如果通過getKind方法來獲取他是甚麼類型的
+        //track表示的是track類型
+
+        //第一種寫法: 不推薦
+        // if ("track".equals(curModel1.getKind())) {
+        //     Track currentTrack = (Track) curModel1;
+        //     LogUtil.v("jeff","title...." +  currentTrack.getTrackTitle());
+        // }
+
+        //第二種寫法
+        if (curModel1 instanceof Track) {
+            Track currentTrack = (Track) curModel1;
+            mCurrentTrack = currentTrack;
+
+            LogUtil.v("jeff","title..." + mCurrentTrack);
+            //更新UI
+            for (IPlayerCallBack mIPlayerCallback : mIPlayerCallbacks) {
+                mIPlayerCallback.onTrackUpdate(mCurrentTrack);
+            }
+        }
 
     }
 
