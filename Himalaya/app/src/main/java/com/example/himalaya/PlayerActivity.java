@@ -1,7 +1,9 @@
 package com.example.himalaya;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -21,7 +23,7 @@ import com.ximalaya.ting.android.opensdk.player.service.XmPlayListControl;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-public class PlayerActivity extends BaseActivity implements IPlayerCallBack {
+public class PlayerActivity extends BaseActivity implements IPlayerCallBack, ViewPager.OnPageChangeListener {
 
     private ImageView mControlBtn;
     private PlayerPresenter mPlayerPresenter;
@@ -38,6 +40,7 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallBack {
     private String mTrackTitleText;
     private ViewPager mTrackPagerView;
     private PlayerTrackPageAdapter mTrackPageAdapter;
+    private boolean mIsUserSlidePage = false;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -54,8 +57,6 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallBack {
         mPlayerPresenter.getPlayList();
 
         initEvent();
-
-        startPlay();
     }
 
     @Override
@@ -70,21 +71,12 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallBack {
         }
     }
 
-    /**
-     * 開始播放
-     */
-    private void startPlay() {
 
-        if (mPlayerPresenter != null) {
-
-            mPlayerPresenter.play();
-
-        }
-    }
 
     /**
      * 給控件設置相關的事件
      */
+    @SuppressLint("ClickableViewAccessibility")
     private void initEvent() {
         mControlBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -147,6 +139,24 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallBack {
             }
         });
 
+        mTrackPagerView.addOnPageChangeListener(this);
+
+        mTrackPagerView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                int action = event.getAction();
+                switch (action) {
+
+                    case MotionEvent.ACTION_DOWN:
+
+                        mIsUserSlidePage = true;
+                        break;
+
+                }
+                return false;
+            }
+        });
+
     }
 
     /**
@@ -181,7 +191,7 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallBack {
 
         if (mControlBtn != null) {
 
-            mControlBtn.setImageResource(R.mipmap.stop_normal);
+            mControlBtn.setImageResource(R.drawable.selector_player_stop);
         }
     }
 
@@ -190,7 +200,7 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallBack {
 
         if (mControlBtn != null) {
 
-            mControlBtn.setImageResource(R.mipmap.play_normal);
+            mControlBtn.setImageResource(R.drawable.selector_player_play);
         }
     }
 
@@ -199,7 +209,7 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallBack {
 
         if (mControlBtn != null) {
 
-            mControlBtn.setImageResource(R.mipmap.play_normal);
+            mControlBtn.setImageResource(R.drawable.selector_player_play);
         }
     }
 
@@ -280,7 +290,7 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallBack {
     }
 
     @Override
-    public void onTrackUpdate(Track track) {
+    public void onTrackUpdate(Track track, int playIndex) {
 
         this.mTrackTitleText = track.getTrackTitle();
 
@@ -289,7 +299,34 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallBack {
             mTrackTitle.setText(mTrackTitleText);
         }
         //當節目改變的時候,就獲取到當前播放器中改變的位置
-        //
+        //當前的節目改變以後,要修改頁面的照片
+        if (mTrackPagerView != null) {
+            mTrackPagerView.setCurrentItem(playIndex, true);
+        }
+    }
+
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+
+        LogUtil.v("jeff", "position --> " + position);
+        //當頁面選中的時候,就去切換播放內容
+        if (mPlayerPresenter != null && mIsUserSlidePage) {
+
+            mPlayerPresenter.playIndex(position);
+
+        }
+            mIsUserSlidePage = false;
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
     }
 }
 

@@ -91,7 +91,7 @@ public interface IPlayerCallBack {
      *
      */
 
-    void onTrackUpdate(Track track);
+    void onTrackUpdate(Track track,int playIndex);
 
 
 }

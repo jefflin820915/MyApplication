@@ -12,6 +12,7 @@ import com.ximalaya.ting.android.opensdk.model.advertis.AdvertisList;
 import com.ximalaya.ting.android.opensdk.model.track.Track;
 import com.ximalaya.ting.android.opensdk.player.XmPlayerManager;
 import com.ximalaya.ting.android.opensdk.player.advertis.IXmAdsStatusListener;
+import com.ximalaya.ting.android.opensdk.player.constants.PlayerConstants;
 import com.ximalaya.ting.android.opensdk.player.service.IXmPlayerStatusListener;
 import com.ximalaya.ting.android.opensdk.player.service.XmPlayListControl;
 import com.ximalaya.ting.android.opensdk.player.service.XmPlayerException;
@@ -27,6 +28,7 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
 
     private XmPlayerManager mPlayerManager;
     private Track mCurrentTrack;
+    private int mCurrentIndex = 0;
 
     private PlayerPresenter() {
 
@@ -60,6 +62,7 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
             mPlayerManager.setPlayList(list, playIndex);
             isPlayListSet = true;
             mCurrentTrack = list.get(playIndex);
+            mCurrentIndex = playIndex;
 
 
         } else {
@@ -94,7 +97,7 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
     @Override
     public void playPre() {
         //播放上一首
-        if (mPlayerManager!=null) {
+        if (mPlayerManager != null) {
             mPlayerManager.playPre();
         }
     }
@@ -102,7 +105,7 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
     @Override
     public void playNext() {
         //播放下一首
-        if (mPlayerManager!=null) {
+        if (mPlayerManager != null) {
             mPlayerManager.playNext();
         }
     }
@@ -126,7 +129,12 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
 
     @Override
     public void playIndex(int index) {
+        //切換播放器到第index的位置進行播放
+        if (mPlayerManager != null) {
 
+            mPlayerManager.play(index);
+
+        }
     }
 
     @Override
@@ -146,7 +154,7 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
     @Override
     public void registerViewCallBack(IPlayerCallBack iPlayerCallBack) {
 
-        iPlayerCallBack.onTrackUpdate(mCurrentTrack);
+        iPlayerCallBack.onTrackUpdate(mCurrentTrack, mCurrentIndex);
 
         if (!mIPlayerCallbacks.contains(iPlayerCallBack)) {
 
@@ -258,7 +266,12 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
     public void onSoundPrepared() {
 
         LogUtil.v("jeff", "onSoundPrepared");
+        LogUtil.v("jeff","status --> " + mPlayerManager.getPlayerStatus());
 
+        if (mPlayerManager.getPlayerStatus()== PlayerConstants.STATE_PREPARED) {
+            //播放器準備完了,可以播放
+            mPlayerManager.play();
+        }
     }
 
     @Override
@@ -271,7 +284,7 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
             LogUtil.v("jeff", "lastModel..." + lastModel.getKind());
 
         }
-            LogUtil.v("jeff", "curModel1..." + curModel1.getKind());
+        LogUtil.v("jeff", "curModel1..." + curModel1.getKind());
 
         //curModel代表的是是當前播放的內容
         //如果通過getKind方法來獲取他是甚麼類型的
@@ -284,14 +297,15 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
         // }
 
         //第二種寫法
+        mCurrentIndex = mPlayerManager.getCurrentIndex();
         if (curModel1 instanceof Track) {
             Track currentTrack = (Track) curModel1;
             mCurrentTrack = currentTrack;
 
-            LogUtil.v("jeff","title..." + mCurrentTrack);
+            LogUtil.v("jeff", "title..." + mCurrentTrack);
             //更新UI
             for (IPlayerCallBack mIPlayerCallback : mIPlayerCallbacks) {
-                mIPlayerCallback.onTrackUpdate(mCurrentTrack);
+                mIPlayerCallback.onTrackUpdate(mCurrentTrack, mCurrentIndex);
             }
         }
 
