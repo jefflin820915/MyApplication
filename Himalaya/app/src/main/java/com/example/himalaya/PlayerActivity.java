@@ -21,7 +21,14 @@ import com.ximalaya.ting.android.opensdk.model.track.Track;
 import com.ximalaya.ting.android.opensdk.player.service.XmPlayListControl;
 
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import static com.ximalaya.ting.android.opensdk.player.service.XmPlayListControl.PlayMode.PLAY_MODEL_LIST;
+import static com.ximalaya.ting.android.opensdk.player.service.XmPlayListControl.PlayMode.PLAY_MODEL_LIST_LOOP;
+import static com.ximalaya.ting.android.opensdk.player.service.XmPlayListControl.PlayMode.PLAY_MODEL_RANDOM;
+import static com.ximalaya.ting.android.opensdk.player.service.XmPlayListControl.PlayMode.PLAY_MODEL_SINGLE_LOOP;
 
 public class PlayerActivity extends BaseActivity implements IPlayerCallBack, ViewPager.OnPageChangeListener {
 
@@ -41,6 +48,26 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallBack, Vie
     private ViewPager mTrackPagerView;
     private PlayerTrackPageAdapter mTrackPageAdapter;
     private boolean mIsUserSlidePage = false;
+    private ImageView mPlayerModeSwitchBtn;
+
+    private XmPlayListControl.PlayMode mCurrentMode = PLAY_MODEL_LIST;
+
+    //
+    private static Map<XmPlayListControl.PlayMode, XmPlayListControl.PlayMode> sPlayModeRule = new HashMap<>();
+
+    //處理播放模式的切換
+    //1. 默認是:列表播放 PLAY_MODEL_LIST
+    //2. 列表循環: PLAY_MODEL_LIST_LOOP
+    //3. 隨機播放: PLAY_MODEL_RANDOM
+    //4. 單曲循環: PLAY_MODEL_SINGLE_LOOP
+
+    static {
+        sPlayModeRule.put(PLAY_MODEL_LIST, PLAY_MODEL_LIST_LOOP);
+        sPlayModeRule.put(PLAY_MODEL_LIST, PLAY_MODEL_RANDOM);
+        sPlayModeRule.put(PLAY_MODEL_RANDOM, PLAY_MODEL_SINGLE_LOOP);
+        sPlayModeRule.put(PLAY_MODEL_SINGLE_LOOP, PLAY_MODEL_LIST);
+
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -70,7 +97,6 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallBack, Vie
             mPlayerPresenter = null;
         }
     }
-
 
 
     /**
@@ -157,6 +183,62 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallBack, Vie
             }
         });
 
+
+        mPlayerModeSwitchBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                //把當前的mode獲取到下一個mode
+                XmPlayListControl.PlayMode playMode = sPlayModeRule.get(mCurrentMode);
+                //修改播放模式
+                if (mPlayerPresenter != null) {
+
+                    mPlayerPresenter.switchPlayMode(playMode);
+                    mCurrentMode = playMode;
+
+                    updatePlayModeBtnImg();
+
+
+                }
+            }
+        });
+
+    }
+
+    /**
+     * 根據當前的狀態,更新播放模式
+     * <p>
+     * PLAY_MODEL_LIST
+     * : PLAY_MODEL_LIST_LOOP
+     * : PLAY_MODEL_RANDOM
+     * : PLAY_MODEL_SINGLE_LOOP
+     */
+    private void updatePlayModeBtnImg() {
+
+        int resId = R.drawable.selector_player_play_mode_list_order;
+
+        switch (mCurrentMode) {
+
+            case PLAY_MODEL_LIST:
+                resId = R.drawable.selector_player_play_mode_list_order;
+                break;
+
+            case PLAY_MODEL_RANDOM:
+                resId = R.drawable.selector_player_play_mode_random;
+
+                break;
+
+            case PLAY_MODEL_LIST_LOOP:
+                resId = R.drawable.selector_player_play_mode_list_order_loop;
+
+                break;
+
+            case PLAY_MODEL_SINGLE_LOOP:
+                resId = R.drawable.selector_player_play_mode_single_loop;
+
+                break;
+        }
+        mPlayerModeSwitchBtn.setImageResource(resId);
     }
 
     /**
@@ -181,6 +263,9 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallBack, Vie
         mTrackPageAdapter = new PlayerTrackPageAdapter();
         //設置適配器
         mTrackPagerView.setAdapter(mTrackPageAdapter);
+
+        //切換播放模式按鈕
+        mPlayerModeSwitchBtn = this.findViewById(R.id.player_mode_switch_btn);
 
     }
 
@@ -278,7 +363,6 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallBack, Vie
         }
     }
 
-
     @Override
     public void onAdLoading() {
 
@@ -321,7 +405,7 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallBack, Vie
             mPlayerPresenter.playIndex(position);
 
         }
-            mIsUserSlidePage = false;
+        mIsUserSlidePage = false;
     }
 
     @Override
