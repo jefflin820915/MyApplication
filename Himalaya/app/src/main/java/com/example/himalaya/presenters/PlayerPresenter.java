@@ -36,6 +36,7 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
     private Track mCurrentTrack;
     private int mCurrentIndex = 0;
     private final SharedPreferences mPlayModSp;
+    private XmPlayListControl.PlayMode mCurrentPlayMode = PLAY_MODEL_LIST;
 
 
     //PLAY_MODEL_LIST
@@ -141,6 +142,7 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
     public void switchPlayMode(XmPlayListControl.PlayMode mode) {
         if (mPlayerManager != null) {
 
+            mCurrentPlayMode = mode;
             mPlayerManager.setPlayMode(mode);
 
             //通知UI更新播放模式
@@ -148,6 +150,7 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
                 mIPlayerCallback.onPlayModeChange(mode);
             }
 
+            //保存到SP裏頭去
             SharedPreferences.Editor edit = mPlayModSp.edit();
             edit.putInt(PLAY_MODE_SP_KEY, getIntByPlayMode(mode));
             edit.commit();
@@ -231,8 +234,9 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
         iPlayerCallBack.onTrackUpdate(mCurrentTrack, mCurrentIndex);
         //從sp裡面拿
         int modeIndex = mPlayModSp.getInt(PLAY_MODE_SP_KEY, PLAY_MODEL_LIST_INT);
+        mCurrentPlayMode = getModeByInt(modeIndex);
         //
-        iPlayerCallBack.onPlayModeChange(getModeByInt(modeIndex));
+        iPlayerCallBack.onPlayModeChange(mCurrentPlayMode);
         if (!mIPlayerCallbacks.contains(iPlayerCallBack)) {
 
             mIPlayerCallbacks.add(iPlayerCallBack);
@@ -345,6 +349,7 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
         LogUtil.v("jeff", "onSoundPrepared");
         LogUtil.v("jeff","status --> " + mPlayerManager.getPlayerStatus());
 
+        mPlayerManager.setPlayMode(mCurrentPlayMode);
         if (mPlayerManager.getPlayerStatus()== PlayerConstants.STATE_PREPARED) {
             //播放器準備完了,可以播放
             mPlayerManager.play();
