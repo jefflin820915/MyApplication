@@ -72,7 +72,7 @@ public class RecommendLIstAdapter extends RecyclerView.Adapter<RecommendLIstAdap
         notifyDataSetChanged();
     }
 
-    public class InnerHolder extends RecyclerView.ViewHolder {
+    public class   InnerHolder extends RecyclerView.ViewHolder {
         public InnerHolder(@NonNull View itemView) {
             super( itemView );
         }

@@ -64,7 +64,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="2dp"
                     android:layout_marginTop="10dp"
-                    android:text="234.5萬"
+                    android:text="1234.5萬"
                     android:textColor="#ff848484"
                     android:textSize="12sp" />
 
@@ -90,7 +90,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="2dp"
                     android:layout_marginTop="10dp"
-                    android:text="23集"
+                    android:text="123集"
                     android:textColor="#ff848484"
                     android:textSize="12sp" />
 

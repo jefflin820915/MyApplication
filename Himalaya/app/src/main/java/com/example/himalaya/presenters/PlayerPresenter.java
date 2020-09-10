@@ -1,6 +1,7 @@
 package com.example.himalaya.presenters;
 
-import android.util.Log;
+import android.content.Context;
+import android.content.SharedPreferences;
 
 import com.example.himalaya.base.BaseApplication;
 import com.example.himalaya.interfances.IPlayerCallBack;
@@ -20,6 +21,11 @@ import com.ximalaya.ting.android.opensdk.player.service.XmPlayerException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.ximalaya.ting.android.opensdk.player.service.XmPlayListControl.PlayMode.PLAY_MODEL_LIST;
+import static com.ximalaya.ting.android.opensdk.player.service.XmPlayListControl.PlayMode.PLAY_MODEL_LIST_LOOP;
+import static com.ximalaya.ting.android.opensdk.player.service.XmPlayListControl.PlayMode.PLAY_MODEL_RANDOM;
+import static com.ximalaya.ting.android.opensdk.player.service.XmPlayListControl.PlayMode.PLAY_MODEL_SINGLE_LOOP;
+
 public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, IXmPlayerStatusListener {
 
 
@@ -29,6 +35,24 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
     private XmPlayerManager mPlayerManager;
     private Track mCurrentTrack;
     private int mCurrentIndex = 0;
+    private final SharedPreferences mPlayModSp;
+
+
+    //PLAY_MODEL_LIST
+    //PLAY_MODEL_LIST_LOOP
+    //PLAY_MODEL_RANDOM
+    //PLAY_MODEL_SINGLE_LOOP
+
+    private static final int PLAY_MODEL_LIST_INT = 0;
+    private static final int PLAY_MODEL_LIST_LOOP_INT = 1;
+    private static final int PLAY_MODEL_RANDOM_INT = 2;
+    private static final int PLAY_MODEL_SINGLE_LOOP_INT = 3;
+
+    //sp-key and name
+    public static final String PLAY_MODE_SP_NAME = "playMod";
+
+    public static final String PLAY_MODE_SP_KEY = "CurrentPlayMod";
+
 
     private PlayerPresenter() {
 
@@ -38,6 +62,9 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
 
         //註冊播放器狀態相關的接口
         mPlayerManager.addPlayerStatusListener(this);
+
+        //需要紀錄當前的播放模式
+        mPlayModSp = BaseApplication.getAppContext().getSharedPreferences(PLAY_MODE_SP_NAME, Context.MODE_PRIVATE);
 
     }
 
@@ -116,8 +143,51 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
 
             mPlayerManager.setPlayMode(mode);
 
+            //通知UI更新播放模式
+            for (IPlayerCallBack mIPlayerCallback : mIPlayerCallbacks) {
+                mIPlayerCallback.onPlayModeChange(mode);
+            }
+
+            SharedPreferences.Editor edit = mPlayModSp.edit();
+            edit.putInt(PLAY_MODE_SP_KEY, getIntByPlayMode(mode));
+            edit.commit();
         }
     }
+
+    private int getIntByPlayMode(XmPlayListControl.PlayMode mode){
+
+        switch (mode){
+            case PLAY_MODEL_SINGLE_LOOP:
+                return PLAY_MODEL_SINGLE_LOOP_INT;
+            case PLAY_MODEL_LIST_LOOP:
+                return PLAY_MODEL_LIST_LOOP_INT;
+            case PLAY_MODEL_RANDOM:
+               return PLAY_MODEL_RANDOM_INT;
+            case PLAY_MODEL_LIST:
+               return PLAY_MODEL_LIST_INT;
+        }
+
+        return PLAY_MODEL_LIST_INT;
+    }
+
+    private XmPlayListControl.PlayMode getModeByInt(int index){
+
+        switch (index){
+            case PLAY_MODEL_SINGLE_LOOP_INT:
+                return PLAY_MODEL_SINGLE_LOOP;
+            case PLAY_MODEL_LIST_LOOP_INT:
+                return PLAY_MODEL_LIST_LOOP;
+            case PLAY_MODEL_RANDOM_INT:
+                return PLAY_MODEL_RANDOM;
+            case PLAY_MODEL_LIST_INT:
+                return PLAY_MODEL_LIST;
+        }
+
+        return PLAY_MODEL_LIST;
+    }
+
+
+
 
     @Override
     public void getPlayList() {
@@ -159,7 +229,10 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
     public void registerViewCallBack(IPlayerCallBack iPlayerCallBack) {
 
         iPlayerCallBack.onTrackUpdate(mCurrentTrack, mCurrentIndex);
-
+        //從sp裡面拿
+        int modeIndex = mPlayModSp.getInt(PLAY_MODE_SP_KEY, PLAY_MODEL_LIST_INT);
+        //
+        iPlayerCallBack.onPlayModeChange(getModeByInt(modeIndex));
         if (!mIPlayerCallbacks.contains(iPlayerCallBack)) {
 
             mIPlayerCallbacks.add(iPlayerCallBack);
