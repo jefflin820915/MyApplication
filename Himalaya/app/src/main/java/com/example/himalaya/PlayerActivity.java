@@ -3,9 +3,13 @@ package com.example.himalaya;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -17,6 +21,7 @@ import com.example.himalaya.base.BaseActivity;
 import com.example.himalaya.interfances.IPlayerCallBack;
 import com.example.himalaya.presenters.PlayerPresenter;
 import com.example.himalaya.utils.LogUtil;
+import com.example.himalaya.views.SobPopWindow;
 import com.ximalaya.ting.android.opensdk.model.track.Track;
 import com.ximalaya.ting.android.opensdk.player.service.XmPlayListControl;
 
@@ -68,6 +73,9 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallBack, Vie
         sPlayModeRule.put(PLAY_MODEL_SINGLE_LOOP, PLAY_MODEL_LIST);
 
     }
+
+    private ImageView mPlayerList;
+    private SobPopWindow mSobPopWindow;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -197,6 +205,31 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallBack, Vie
             }
         });
 
+
+        mPlayerList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //todo:展示播放列表
+                mSobPopWindow.showAtLocation(v, Gravity.BOTTOM, 0, 0);
+                //處理一下背景,有點透明度
+                updateBgAlpha(0.8f);
+            }
+        });
+
+        mSobPopWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                //pop窗體消失以後,恢復透明度
+               updateBgAlpha(1.0f);
+            }
+        });
+    }
+
+    public void updateBgAlpha(float alpha){
+        Window window = getWindow();
+        WindowManager.LayoutParams attributes = window.getAttributes();
+        attributes.alpha = alpha;
+        window.setAttributes(attributes);
     }
 
     /**
@@ -260,6 +293,10 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallBack, Vie
 
         //切換播放模式按鈕
         mPlayerModeSwitchBtn = this.findViewById(R.id.player_mode_switch_btn);
+
+        //播放列表
+        mPlayerList = this.findViewById(R.id.player_list);
+        mSobPopWindow = new SobPopWindow();
 
     }
 
